@@ -1,0 +1,4158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        header nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        header nav button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        header nav button:hover {
+            background-color: #2980b9;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: none;
+        }
+
+        .active-section {
+            display: block;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 24px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .form-container {
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .input-group input, .input-group select, .input-group textarea {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 200px;
+            font-size: 16px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-success {
+            background-color: #2ecc71;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-warning {
+            background-color: #f39c12;
+        }
+
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .action-btn {
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+            font-size: 14px;
+        }
+
+        .edit-btn {
+            background-color: #f39c12;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+        }
+
+        .view-btn {
+            background-color: #3498db;
+        }
+
+        .payment-btn {
+            background-color: #2ecc71;
+        }
+
+        .details-btn {
+            background-color: #9b59b6;
+        }
+
+        .sales-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .customer-select, .item-select {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .customer-select label, .item-select label {
+            font-weight: bold;
+            min-width: 80px;
+        }
+
+        .cart-container {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .cart-container h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .payment-section {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .amount-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .amount-row span {
+            font-weight: bold;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            overflow: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .bill-content {
+            padding: 30px;
+            font-family: Arial, sans-serif;
+        }
+
+        .bill-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+        }
+
+        .bill-header h2 {
+            color: #2c3e50;
+            margin: 0;
+            border: none;
+            font-size: 28px;
+        }
+
+        .bill-company-info {
+            text-align: right;
+        }
+
+        .bill-company-info p {
+            margin: 5px 0;
+        }
+
+        .bill-customer {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .bill-customer h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .bill-items {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+
+        .bill-items th, .bill-items td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .bill-items th {
+            background-color: #f2f2f2;
+        }
+
+        .bill-summary {
+            margin-top: 25px;
+            text-align: right;
+            border-top: 2px solid #333;
+            padding-top: 15px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .bill-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .text-success {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .text-danger {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .payment-section .input-group {
+            margin-bottom: 15px;
+        }
+
+        .payment-section .input-group label {
+            min-width: 120px;
+            font-weight: bold;
+        }
+
+        .payment-section .input-group select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Salesman Section Styles */
+        .salesman-details {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .salesman-summary, .salesman-expenses {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .salesman-summary h3, .salesman-expenses h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* Report Styles */
+        .report-results {
+            margin-top: 20px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .report-results table {
+            margin-top: 15px;
+        }
+
+        .report-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .database-section {
+            margin-top: 20px;
+        }
+
+        .database-section h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tab-buttons button {
+            padding: 10px 15px;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .tab-buttons button.active {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Recovery Person Section */
+        .recovery-summary {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .recovery-card {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .recovery-card h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .recovery-card .amount {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .recovery-card .positive {
+            color: #2ecc71;
+        }
+
+        .recovery-card .negative {
+            color: #e74c3c;
+        }
+
+        /* Inventory Types */
+        .inventory-type-selector {
+            margin-bottom: 20px;
+        }
+
+        .inventory-type-selector select {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+        }
+
+        /* Supplier Management */
+        .supplier-management {
+            margin-top: 20px;
+        }
+
+        .supplier-form {
+            margin-bottom: 20px;
+        }
+
+        /* Notes Section */
+        .notes-section {
+            margin-top: 15px;
+        }
+
+        .notes-section textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        /* Customer Details Modal */
+        .customer-details-modal {
+            max-width: 900px;
+        }
+
+        .customer-info, .supplier-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .customer-transactions, .supplier-transactions {
+            margin-top: 20px;
+        }
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transaction-table th, .transaction-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .transaction-table th {
+            background-color: #f2f2f2;
+        }
+
+        /* Bank Account Section */
+        .bank-account-section {
+            margin-top: 30px;
+        }
+
+        .bank-summary {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .bank-card {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .bank-card h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .bank-card .amount {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        /* Weight Information */
+        .weight-info {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .weight-info p {
+            margin: 5px 0;
+        }
+
+        @media (max-width: 768px) {
+            .input-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 20px;
+            }
+            
+            header nav {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            header nav button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .salesman-details {
+                flex-direction: column;
+            }
+            
+            .recovery-summary {
+                flex-direction: column;
+            }
+            
+            .customer-info, .supplier-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .bank-summary {
+                flex-direction: column;
+            }
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #bill-modal, #bill-modal * {
+                visibility: visible;
+            }
+            #bill-modal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: auto;
+                margin: 0;
+                padding: 0;
+            }
+            .bill-actions {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-store"></i> Business Management System - Abdullah Hafiz Traders</h1>
+        <nav>
+            <button onclick="showSection('inventory')"><i class="fas fa-boxes"></i> Inventory</button>
+            <button onclick="showSection('customers')"><i class="fas fa-users"></i> Customers</button>
+            <button onclick="showSection('suppliers')"><i class="fas fa-truck"></i> Suppliers</button>
+            <button onclick="showSection('sales')"><i class="fas fa-shopping-cart"></i> Sales</button>
+            <button onclick="showSection('salesman')"><i class="fas fa-user-tie"></i> Salesman</button>
+            <button onclick="showSection('recovery-person')"><i class="fas fa-hand-holding-usd"></i> Recovery Person</button>
+            <button onclick="showSection('bank-account')"><i class="fas fa-university"></i> Bank Account</button>
+            <button onclick="showSection('reports')"><i class="fas fa-chart-bar"></i> Reports</button>
+            <button onclick="showSection('database')"><i class="fas fa-database"></i> Database</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Inventory Section -->
+        <section id="inventory" class="content-section active-section">
+            <h2><i class="fas fa-boxes"></i> Inventory Management</h2>
+            
+            <div class="inventory-type-selector">
+                <select id="inventory-type" onchange="switchInventoryType()">
+                    <option value="retail">Retail Inventory</option>
+                    <option value="main">Main Inventory</option>
+                </select>
+            </div>
+            
+            <!-- Retail Inventory -->
+            <div id="retail-inventory" class="inventory-type">
+                <div class="form-container">
+                    <div class="input-group">
+                        <input type="text" id="item-name" placeholder="Item Name">
+                        <input type="number" id="item-price" placeholder="Price" step="0.01">
+                        <input type="number" id="item-quantity" placeholder="Quantity">
+                        <button onclick="addNewItem()" class="btn"><i class="fas fa-plus"></i> Add Item</button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table id="inventory-table">
+                        <thead>
+                            <tr>
+                                <th width="5%">ID</th>
+                                <th width="20%">Item Name</th>
+                                <th width="15%">Price</th>
+                                <th width="15%">Quantity</th>
+                                <th width="15%">Value</th>
+                                <th width="30%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Inventory items will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Main Inventory -->
+            <div id="main-inventory" class="inventory-type" style="display: none;">
+                <h3>Supplier Items</h3>
+                <div class="form-container">
+                    <div class="input-group">
+                        <select id="supplier-stock">
+                            <option value="">Select Supplier</option>
+                        </select>
+                        <input type="text" id="supplier-item" placeholder="Item Name">
+                        <input type="number" id="supplier-quantity" placeholder="Quantity">
+                        <input type="number" id="supplier-price" placeholder="Price" step="0.01">
+                        <input type="number" id="supplier-weight" placeholder="Weight per unit" step="0.01">
+                        <button onclick="addSupplierItem()" class="btn"><i class="fas fa-plus"></i> Add Supplier Item</button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table id="supplier-table">
+                        <thead>
+                            <tr>
+                                <th width="5%">ID</th>
+                                <th width="15%">Supplier</th>
+                                <th width="15%">Item</th>
+                                <th width="10%">Price</th>
+                                <th width="10%">Quantity</th>
+                                <th width="10%">Weight/Unit</th>
+                                <th width="10%">Total Weight</th>
+                                <th width="10%">Value</th>
+                                <th width="15%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Supplier items will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="stock-transfer">
+                    <h3>Stock Transfer to Customer</h3>
+                    <div class="input-group">
+                        <select id="transfer-supplier">
+                            <option value="">Select Supplier</option>
+                        </select>
+                        <select id="transfer-item">
+                            <option value="">Select Item</option>
+                        </select>
+                        <select id="transfer-type" onchange="toggleTransferCustomer()">
+                            <option value="retailer">Retailer</option>
+                            <option value="customer">Customer</option>
+                        </select>
+                        <select id="transfer-customer">
+                            <option value="">Select Customer</option>
+                        </select>
+                        <input type="number" id="transfer-quantity" placeholder="Quantity">
+                        <input type="number" id="transfer-price" placeholder="Price" step="0.01">
+                    </div>
+                    <div class="input-group">
+                        <textarea id="transfer-notes" placeholder="Transfer Notes"></textarea>
+                        <button onclick="transferStockToCustomer()" class="btn"><i class="fas fa-exchange-alt"></i> Transfer Stock</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Customers Section -->
+        <section id="customers" class="content-section">
+            <h2><i class="fas fa-users"></i> Customer Management</h2>
+            <div class="form-container">
+                <div class="input-group">
+                    <input type="text" id="customer-name" placeholder="Customer Name">
+                    <input type="number" id="customer-phone" placeholder="Phone">
+                    <input type="text" id="customer-address" placeholder="Address">
+                    <input type="date" id="customer-date" placeholder="Date">
+                    <input type="number" id="customer-balance" placeholder="Initial Balance" step="0.01">
+                    <button onclick="addNewCustomer()" class="btn"><i class="fas fa-user-plus"></i> Add Customer</button>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table id="customers-table">
+                    <thead>
+                        <tr>
+                            <th width="5%">ID</th>
+                            <th width="15%">Name</th>
+                            <th width="15%">Phone</th>
+                            <th width="20%">Address</th>
+                            <th width="15%">Balance</th>
+                            <th width="10%">Date</th>
+                            <th width="20%">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Customers will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Suppliers Section -->
+        <section id="suppliers" class="content-section">
+            <h2><i class="fas fa-truck"></i> Supplier Management</h2>
+            <div class="form-container">
+                <div class="input-group">
+                    <input type="text" id="supplier-name" placeholder="Supplier Name">
+                    <input type="number" id="supplier-contact" placeholder="Contact No">
+                    <input type="text" id="supplier-address" placeholder="Address">
+                    <input type="date" id="supplier-date" placeholder="Date">
+                    <input type="number" id="supplier-balance" placeholder="Initial Balance" step="0.01">
+                    <button onclick="addNewSupplier()" class="btn"><i class="fas fa-plus"></i> Add Supplier</button>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table id="suppliers-table">
+                    <thead>
+                        <tr>
+                            <th width="5%">ID</th>
+                            <th width="20%">Name</th>
+                            <th width="15%">Contact</th>
+                            <th width="20%">Address</th>
+                            <th width="10%">Balance</th>
+                            <th width="10%">Date</th>
+                            <th width="20%">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Suppliers will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Sales Section -->
+        <section id="sales" class="content-section">
+            <h2><i class="fas fa-shopping-cart"></i> Create New Sale</h2>
+            <div class="sales-container">
+                <div class="input-group">
+                    <input type="date" id="sale-date" placeholder="Date">
+                    <select id="sale-customer">
+                        <option value="">Select Customer</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <select id="sale-item" onchange="updateSalePrice()">
+                        <option value="">Select Item</option>
+                    </select>
+                    <input type="number" id="sale-quantity" placeholder="Qty" min="1" value="1">
+                    <input type="number" id="sale-price" placeholder="Price" step="0.01">
+                    <button onclick="addToCart()" class="btn"><i class="fas fa-cart-plus"></i> Add to Cart</button>
+                </div>
+                
+                <div class="cart-container">
+                    <h3><i class="fas fa-shopping-basket"></i> Sale Items</h3>
+                    <table id="cart-table">
+                        <thead>
+                            <tr>
+                                <th width="35%">Item</th>
+                                <th width="15%">Price</th>
+                                <th width="15%">Qty</th>
+                                <th width="15%">Total</th>
+                                <th width="20%">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Cart items will appear here -->
+                        </tbody>
+                    </table>
+                    
+                    <div class="payment-section">
+                        <div class="amount-row">
+                            <span>Total:</span>
+                            <span id="cart-total">0.00</span>
+                        </div>
+                        <div class="input-group">
+                            <label for="payment-method">Payment Method:</label>
+                            <select id="payment-method">
+                                <option value="cash">Cash</option>
+                                <option value="account">Account</option>
+                            </select>
+                        </div>
+                        <div class="amount-row">
+                            <label for="payment-amount">Payment Amount:</label>
+                            <input type="number" id="payment-amount" placeholder="Amount paid" step="0.01">
+                        </div>
+                        <div class="amount-row">
+                            <span>Balance:</span>
+                            <span id="cart-balance">0.00</span>
+                        </div>
+                        <button onclick="completeSale()" class="btn btn-success"><i class="fas fa-check"></i> Complete Sale</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Salesman Section -->
+        <section id="salesman" class="content-section">
+            <h2><i class="fas fa-user-tie"></i> Salesman Dashboard</h2>
+            <div class="form-container">
+                <div class="input-group">
+                    <input type="date" id="salesman-date" placeholder="Date">
+                    <button onclick="startNewDay()" class="btn"><i class="fas fa-play"></i> Start New Day</button>
+                </div>
+            </div>
+            
+            <div class="salesman-details">
+                <div class="salesman-summary">
+                    <h3><i class="fas fa-info-circle"></i> Day Summary</h3>
+                    <div class="summary-row">
+                        <span>Date:</span>
+                        <span id="current-day-date">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Total Sales:</span>
+                        <span id="total-sales">0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Total Expenses:</span>
+                        <span id="total-expenses">0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Remaining Amount:</span>
+                        <span id="remaining-amount">0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Amount to Bank:</span>
+                        <span id="amount-to-bank">0.00</span>
+                    </div>
+                </div>
+                
+                <div class="salesman-expenses">
+                    <h3><i class="fas fa-receipt"></i> Add Expense</h3>
+                    <div class="input-group">
+                        <input type="text" id="expense-description" placeholder="Description">
+                        <input type="number" id="expense-amount" placeholder="Amount" step="0.01">
+                        <button onclick="addExpense()" class="btn"><i class="fas fa-plus"></i> Add Expense</button>
+                    </div>
+                    
+                    <h3><i class="fas fa-list"></i> Today's Expenses</h3>
+                    <table id="expenses-table">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Time</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Expenses will appear here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="manual-sale-entry">
+                    <h3><i class="fas fa-hand-holding-usd"></i> Add Manual Sale</h3>
+                    <div class="input-group">
+                        <input type="number" id="manual-sale-amount" placeholder="Sale Amount" step="0.01">
+                        <button onclick="addManualSale()" class="btn"><i class="fas fa-plus"></i> Add Sale</button>
+                    </div>
+                    
+                    <h3><i class="fas fa-university"></i> Send to Bank</h3>
+                    <div class="input-group">
+                        <input type="number" id="bank-amount" placeholder="Amount to Bank" step="0.01">
+                        <button onclick="sendToBank()" class="btn btn-info"><i class="fas fa-paper-plane"></i> Send to Bank</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recovery Person Section -->
+        <section id="recovery-person" class="content-section">
+            <h2><i class="fas fa-hand-holding-usd"></i> Recovery Person Dashboard</h2>
+            
+            <div class="form-container">
+                <div class="input-group">
+                    <input type="date" id="recovery-date" placeholder="Date">
+                    <button onclick="startRecoveryDay()" class="btn"><i class="fas fa-play"></i> Start Recovery Day</button>
+                </div>
+            </div>
+            
+            <div class="recovery-summary">
+                <div class="recovery-card">
+                    <h3>Total Recovered</h3>
+                    <div class="amount positive" id="total-recovered">0.00</div>
+                    <p>Amount collected from customers</p>
+                </div>
+                <div class="recovery-card">
+                    <h3>Total Paid to Suppliers</h3>
+                    <div class="amount negative" id="total-paid-suppliers">0.00</div>
+                    <p>Amount paid to suppliers</p>
+                </div>
+                <div class="recovery-card">
+                    <h3>Recovery Expenses</h3>
+                    <div class="amount negative" id="total-recovery-expenses">0.00</div>
+                    <p>Expenses during recovery</p>
+                </div>
+                <div class="recovery-card">
+                    <h3>Remaining Amount</h3>
+                    <div class="amount" id="recovery-remaining">0.00</div>
+                    <p>Amount to be distributed</p>
+                </div>
+            </div>
+            
+            <div class="recovery-details">
+                <div class="recovery-actions">
+                    <div class="input-group">
+                        <select id="recovery-customer">
+                            <option value="">Select Customer</option>
+                        </select>
+                        <input type="number" id="recovery-amount" placeholder="Recovery Amount" step="0.01">
+                        <button onclick="addRecovery()" class="btn"><i class="fas fa-hand-holding-usd"></i> Add Recovery</button>
+                    </div>
+                    
+                    <div class="input-group">
+                        <select id="supplier-payment">
+                            <option value="">Select Supplier</option>
+                        </select>
+                        <input type="number" id="supplier-payment-amount" placeholder="Payment Amount" step="0.01">
+                        <select id="payment-account">
+                            <option value="abdullah">Abdullah Account</option>
+                            <option value="haji">Haji Account</option>
+                            <option value="cash">Cash</option>
+                        </select>
+                        <button onclick="addSupplierPayment()" class="btn"><i class="fas fa-money-bill-wave"></i> Add Supplier Payment</button>
+                    </div>
+                    
+                    <div class="input-group">
+                        <input type="text" id="recovery-expense-description" placeholder="Expense Description">
+                        <input type="number" id="recovery-expense-amount" placeholder="Expense Amount" step="0.01">
+                        <button onclick="addRecoveryExpense()" class="btn"><i class="fas fa-receipt"></i> Add Expense</button>
+                    </div>
+                    
+                    <div class="input-group">
+                        <input type="number" id="recovery-bank-amount" placeholder="Amount to Bank" step="0.01">
+                        <button onclick="sendRecoveryToBank()" class="btn btn-info"><i class="fas fa-paper-plane"></i> Send to Bank</button>
+                    </div>
+                </div>
+                
+                <div class="recovery-tables">
+                    <div class="table-container">
+                        <h3>Today's Recoveries</h3>
+                        <table id="recoveries-table">
+                            <thead>
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Amount</th>
+                                    <th>Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Recoveries will appear here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="table-container">
+                        <h3>Today's Supplier Payments</h3>
+                        <table id="supplier-payments-table">
+                            <thead>
+                                <tr>
+                                    <th>Supplier</th>
+                                    <th>Amount</th>
+                                    <th>Account</th>
+                                    <th>Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Supplier payments will appear here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="table-container">
+                        <h3>Today's Recovery Expenses</h3>
+                        <table id="recovery-expenses-table">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Recovery expenses will appear here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bank Account Section -->
+        <section id="bank-account" class="content-section">
+            <h2><i class="fas fa-university"></i> Bank Account Management</h2>
+            
+            <div class="bank-summary">
+                <div class="bank-card">
+                    <h3>Total Balance</h3>
+                    <div class="amount positive" id="total-bank-balance">0.00</div>
+                    <p>Current bank account balance</p>
+                </div>
+                <div class="bank-card">
+                    <h3>Total Deposits</h3>
+                    <div class="amount positive" id="total-deposits">0.00</div>
+                    <p>Total amount deposited</p>
+                </div>
+                <div class="bank-card">
+                    <h3>Total Withdrawals</h3>
+                    <div class="amount negative" id="total-withdrawals">0.00</div>
+                    <p>Total amount withdrawn</p>
+                </div>
+            </div>
+            
+            <div class="form-container">
+                <div class="input-group">
+                    <input type="date" id="bank-date" placeholder="Date">
+                    <select id="bank-transaction-type">
+                        <option value="deposit">Deposit</option>
+                        <option value="withdrawal">Withdrawal</option>
+                    </select>
+                    <input type="number" id="bank-amount-input" placeholder="Amount" step="0.01">
+                    <select id="bank-source">
+                        <option value="salesman">Salesman</option>
+                        <option value="recovery">Recovery Person</option>
+                        <option value="customer">Customer Payment</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <input type="text" id="bank-description" placeholder="Description">
+                    <button onclick="addBankTransaction()" class="btn"><i class="fas fa-plus"></i> Add Transaction</button>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <h3>Bank Transaction History</h3>
+                <table id="bank-transactions-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Source</th>
+                            <th>Description</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Bank transactions will appear here -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="content-section">
+            <h2><i class="fas fa-chart-bar"></i> Reports</h2>
+            <div class="report-options">
+                <button onclick="generateInventoryReport()" class="btn"><i class="fas fa-box"></i> Inventory Report</button>
+                <button onclick="generateSalesReport()" class="btn"><i class="fas fa-chart-line"></i> Sales Report</button>
+                <button onclick="generateCustomerReport()" class="btn"><i class="fas fa-users"></i> Customer Balances</button>
+                <button onclick="generateSupplierReport()" class="btn"><i class="fas fa-truck"></i> Supplier Report</button>
+                <button onclick="generateSalesmanReport()" class="btn"><i class="fas fa-user-tie"></i> Salesman Report</button>
+                <button onclick="generateRecoveryReport()" class="btn"><i class="fas fa-hand-holding-usd"></i> Recovery Report</button>
+                <button onclick="generateBankReport()" class="btn"><i class="fas fa-university"></i> Bank Report</button>
+                <button onclick="generateMonthlySalesReport()" class="btn"><i class="fas fa-calendar"></i> Monthly Sales</button>
+            </div>
+            
+            <div id="report-results" class="report-results">
+                <!-- Reports will be displayed here -->
+            </div>
+            
+            <div id="sales-chart-container" class="chart-container" style="display: none;">
+                <canvas id="sales-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Database Section -->
+        <section id="database" class="content-section">
+            <h2><i class="fas fa-database"></i> Database Viewer</h2>
+            
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="showDatabaseTab('inventory-data')">Inventory</button>
+                <button class="tab-btn" onclick="showDatabaseTab('customers-data')">Customers</button>
+                <button class="tab-btn" onclick="showDatabaseTab('suppliers-data')">Suppliers</button>
+                <button class="tab-btn" onclick="showDatabaseTab('sales-data')">Sales</button>
+                <button class="tab-btn" onclick="showDatabaseTab('salesman-data')">Salesman</button>
+                <button class="tab-btn" onclick="showDatabaseTab('recovery-data')">Recovery</button>
+                <button class="tab-btn" onclick="showDatabaseTab('supplier-items-data')">Supplier Items</button>
+                <button class="tab-btn" onclick="showDatabaseTab('bank-data')">Bank Transactions</button>
+            </div>
+            
+            <div id="inventory-data" class="tab-content active">
+                <h3>Inventory Data</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-db-data">
+                            <!-- Inventory data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="customers-data" class="tab-content">
+                <h3>Customers Data</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Address</th>
+                                <th>Balance</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customers-db-data">
+                            <!-- Customers data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="suppliers-data" class="tab-content">
+                <h3>Suppliers Data</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Contact</th>
+                                <th>Address</th>
+                                <th>Balance</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="suppliers-db-data">
+                            <!-- Suppliers data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="sales-data" class="tab-content">
+                <h3>Sales Data</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Total</th>
+                                <th>Paid</th>
+                                <th>Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sales-db-data">
+                            <!-- Sales data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="salesman-data" class="tab-content">
+                <h3>Salesman Data</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Sales</th>
+                                <th>Expenses</th>
+                                <th>Bank Transfer</th>
+                                <th>Remaining</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesman-db-data">
+                            <!-- Salesman data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="recovery-data" class="tab-content">
+                <h3>Recovery Data</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recovery-db-data">
+                            <!-- Recovery data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="supplier-items-data" class="tab-content">
+                <h3>Supplier Items Data</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Supplier</th>
+                                <th>Item</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Weight/Unit</th>
+                                <th>Total Weight</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="supplier-items-db-data">
+                            <!-- Supplier items data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div id="bank-data" class="tab-content">
+                <h3>Bank Transactions Data</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Source</th>
+                                <th>Description</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bank-db-data">
+                            <!-- Bank data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bill/Invoice Modal -->
+        <div id="bill-modal" class="modal">
+            <div class="modal-content bill-content">
+                <div class="bill-header">
+                    <h2>Abdullah Hafiz Traders</h2>
+                    <div class="bill-company-info">
+                        <p><strong>Invoice #:</strong> <span id="invoice-number"></span></p>
+                        <p><strong>Date:</strong> <span id="invoice-date"></span></p>
+                    </div>
+                </div>
+                
+                <div class="bill-customer">
+                    <h3>Bill To:</h3>
+                    <p id="bill-customer-name"></p>
+                    <p id="bill-customer-phone"></p>
+                    <p id="bill-customer-address"></p>
+                </div>
+                
+                <table class="bill-items">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bill-items">
+                        <!-- Bill items will be loaded here -->
+                    </tbody>
+                </table>
+                
+                <div class="bill-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="bill-subtotal">0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Amount Paid:</span>
+                        <span id="bill-paid">0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Balance Due:</span>
+                        <span id="bill-balance">0.00</span>
+                    </div>
+                </div>
+                
+                <div class="bill-notes">
+                    <p><strong>NOTES:</strong></p>
+                    <p>Your own shares of the same order registered at Product 5.2 will be the most beneficial.</p>
+                </div>
+                
+                <div class="bill-actions">
+                    <button onclick="printBill()" class="btn"><i class="fas fa-print"></i> Print Bill</button>
+                    <button onclick="downloadBill()" class="btn"><i class="fas fa-download"></i> Download</button>
+                    <button onclick="shareBill()" class="btn"><i class="fas fa-share"></i> Share</button>
+                    <button onclick="closeModal('bill-modal')" class="btn"><i class="fas fa-times"></i> Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Details Modal -->
+        <div id="customer-details-modal" class="modal">
+            <div class="modal-content customer-details-modal">
+                <h2>Customer Details</h2>
+                <div id="customer-details-content">
+                    <!-- Customer details will be loaded here -->
+                </div>
+                <div class="bill-actions">
+                    <button onclick="closeModal('customer-details-modal')" class="btn"><i class="fas fa-times"></i> Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Supplier Details Modal -->
+        <div id="supplier-details-modal" class="modal">
+            <div class="modal-content customer-details-modal">
+                <h2>Supplier Details</h2>
+                <div id="supplier-details-content">
+                    <!-- Supplier details will be loaded here -->
+                </div>
+                <div class="bill-actions">
+                    <button onclick="closeModal('supplier-details-modal')" class="btn"><i class="fas fa-times"></i> Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Modal -->
+        <div id="payment-modal" class="modal">
+            <div class="modal-content">
+                <h2>Customer Payment</h2>
+                <div class="input-group">
+                    <label for="payment-customer">Customer:</label>
+                    <select id="payment-customer">
+                        <option value="">Select Customer</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="payment-amount-input">Amount:</label>
+                    <input type="number" id="payment-amount-input" placeholder="Payment amount" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label for="payment-method-input">Method:</label>
+                    <select id="payment-method-input">
+                        <option value="cash">Cash</option>
+                        <option value="account">Account</option>
+                    </select>
+                </div>
+                <div class="bill-actions">
+                    <button onclick="processPayment()" class="btn btn-success"><i class="fas fa-check"></i> Process Payment</button>
+                    <button onclick="closeModal('payment-modal')" class="btn"><i class="fas fa-times"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Supplier Payment Modal -->
+        <div id="supplier-payment-modal" class="modal">
+            <div class="modal-content">
+                <h2>Supplier Payment</h2>
+                <div class="input-group">
+                    <label for="supplier-payment-customer">Supplier:</label>
+                    <select id="supplier-payment-customer">
+                        <option value="">Select Supplier</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="supplier-payment-amount-input">Amount:</label>
+                    <input type="number" id="supplier-payment-amount-input" placeholder="Payment amount" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label for="supplier-payment-method-input">Method:</label>
+                    <select id="supplier-payment-method-input">
+                        <option value="cash">Cash</option>
+                        <option value="account">Account</option>
+                    </select>
+                </div>
+                <div class="bill-actions">
+                    <button onclick="processSupplierPayment()" class="btn btn-success"><i class="fas fa-check"></i> Process Payment</button>
+                    <button onclick="closeModal('supplier-payment-modal')" class="btn"><i class="fas fa-times"></i> Cancel</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // Initialize data storage
+        let inventory = JSON.parse(localStorage.getItem('inventory')) || [];
+        let customers = JSON.parse(localStorage.getItem('customers')) || [];
+        let suppliers = JSON.parse(localStorage.getItem('suppliers')) || [];
+        let sales = JSON.parse(localStorage.getItem('sales')) || [];
+        let salesmanDays = JSON.parse(localStorage.getItem('salesmanDays')) || [];
+        let recoveryDays = JSON.parse(localStorage.getItem('recoveryDays')) || [];
+        let supplierItems = JSON.parse(localStorage.getItem('supplierItems')) || [];
+        let inventoryHistory = JSON.parse(localStorage.getItem('inventoryHistory')) || [];
+        let bankTransactions = JSON.parse(localStorage.getItem('bankTransactions')) || [];
+        let cart = [];
+        let currentDay = null;
+        let currentRecoveryDay = null;
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load all data
+            loadInventory();
+            loadCustomers();
+            loadSuppliers();
+            loadSupplierItems();
+            loadBankTransactions();
+            setupSalesTab();
+            setupSalesmanTab();
+            setupRecoveryTab();
+            loadDatabaseView();
+            
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('sale-date').value = today;
+            document.getElementById('salesman-date').value = today;
+            document.getElementById('recovery-date').value = today;
+            document.getElementById('customer-date').value = today;
+            document.getElementById('supplier-date').value = today;
+            document.getElementById('bank-date').value = today;
+            
+            // Add payment button to customer table
+            addPaymentButtonToCustomers();
+        });
+
+        // Navigation function
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active-section');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active-section');
+            
+            // Refresh content if needed
+            if (sectionId === 'sales') {
+                setupSalesTab();
+            } else if (sectionId === 'salesman') {
+                setupSalesmanTab();
+            } else if (sectionId === 'recovery-person') {
+                setupRecoveryTab();
+            } else if (sectionId === 'database') {
+                loadDatabaseView();
+            } else if (sectionId === 'inventory') {
+                loadInventory();
+                loadSupplierItems();
+            } else if (sectionId === 'suppliers') {
+                loadSuppliers();
+            } else if (sectionId === 'bank-account') {
+                loadBankTransactions();
+                updateBankSummary();
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showDatabaseTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Inventory Management
+        function switchInventoryType() {
+            const type = document.getElementById('inventory-type').value;
+            
+            if (type === 'retail') {
+                document.getElementById('retail-inventory').style.display = 'block';
+                document.getElementById('main-inventory').style.display = 'none';
+            } else {
+                document.getElementById('retail-inventory').style.display = 'none';
+                document.getElementById('main-inventory').style.display = 'block';
+            }
+        }
+
+        function loadInventory() {
+            const inventoryTable = document.getElementById('inventory-table').querySelector('tbody');
+            inventoryTable.innerHTML = '';
+            
+            inventory.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.price.toFixed(2)}</td>
+                    <td>${item.quantity}</td>
+                    <td>${(item.price * item.quantity).toFixed(2)}</td>
+                    <td>
+                        <button onclick="editItem(${index})" class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteItem(${index})" class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                inventoryTable.appendChild(row);
+            });
+        }
+
+        function addNewItem() {
+            const name = document.getElementById('item-name').value.trim();
+            const price = parseFloat(document.getElementById('item-price').value);
+            const quantity = parseInt(document.getElementById('item-quantity').value);
+
+            if (!name || isNaN(price) || isNaN(quantity)) {
+                alert('Please fill all fields with valid data');
+                return;
+            }
+
+            // Check if item already exists
+            const existingItemIndex = inventory.findIndex(item => item.name.toLowerCase() === name.toLowerCase());
+            
+            if (existingItemIndex !== -1) {
+                // Calculate weighted average price
+                const existingItem = inventory[existingItemIndex];
+                const totalQuantity = existingItem.quantity + quantity;
+                const totalValue = (existingItem.price * existingItem.quantity) + (price * quantity);
+                const averagePrice = totalValue / totalQuantity;
+                
+                // Update existing item with new quantity and average price
+                inventory[existingItemIndex].price = averagePrice;
+                inventory[existingItemIndex].quantity = totalQuantity;
+                
+                // Add to inventory history (update)
+                inventoryHistory.push({
+                    itemName: name,
+                    price: averagePrice,
+                    quantity: quantity,
+                    date: new Date().toLocaleString(),
+                    type: 'Update'
+                });
+            } else {
+                // Add new item
+                inventory.push({ 
+                    name, 
+                    price, 
+                    quantity
+                });
+                
+                // Add to inventory history (new item)
+                inventoryHistory.push({
+                    itemName: name,
+                    price: price,
+                    quantity: quantity,
+                    date: new Date().toLocaleString(),
+                    type: 'New'
+                });
+            }
+
+            saveInventory();
+            saveInventoryHistory();
+            loadInventory();
+            
+            // Clear form
+            document.getElementById('item-name').value = '';
+            document.getElementById('item-price').value = '';
+            document.getElementById('item-quantity').value = '';
+        }
+
+        function editItem(index) {
+            const item = inventory[index];
+            const newName = prompt('Enter new name:', item.name);
+            if (newName === null) return;
+
+            const newPrice = parseFloat(prompt('Enter new price:', item.price));
+            if (isNaN(newPrice)) {
+                alert('Invalid price');
+                return;
+            }
+
+            const newQty = parseInt(prompt('Enter new quantity:', item.quantity));
+            if (isNaN(newQty)) {
+                alert('Invalid quantity');
+                return;
+            }
+
+            // Add to inventory history (edit)
+            inventoryHistory.push({
+                itemName: newName,
+                price: newPrice,
+                quantity: newQty - item.quantity, // Quantity change
+                date: new Date().toLocaleString(),
+                type: 'Edit'
+            });
+
+            inventory[index] = { 
+                name: newName, 
+                price: newPrice, 
+                quantity: newQty
+            };
+
+            saveInventory();
+            saveInventoryHistory();
+            loadInventory();
+        }
+
+        function deleteItem(index) {
+            if (confirm('Are you sure you want to delete this item?')) {
+                // Add to inventory history (delete)
+                const item = inventory[index];
+                inventoryHistory.push({
+                    itemName: item.name,
+                    price: item.price,
+                    quantity: -item.quantity, // Remove all quantity
+                    date: new Date().toLocaleString(),
+                    type: 'Delete'
+                });
+                
+                inventory.splice(index, 1);
+                saveInventory();
+                saveInventoryHistory();
+                loadInventory();
+            }
+        }
+
+        function saveInventory() {
+            localStorage.setItem('inventory', JSON.stringify(inventory));
+        }
+
+        function saveInventoryHistory() {
+            localStorage.setItem('inventoryHistory', JSON.stringify(inventoryHistory));
+        }
+
+        // Supplier Management
+        function loadSuppliers() {
+            const suppliersTable = document.getElementById('suppliers-table').querySelector('tbody');
+            suppliersTable.innerHTML = '';
+            
+            suppliers.forEach((supplier, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${supplier.name}</td>
+                    <td>${supplier.contact || 'N/A'}</td>
+                    <td>${supplier.address || 'N/A'}</td>
+                    <td>${supplier.balance ? supplier.balance.toFixed(2) : '0.00'}</td>
+                    <td>${supplier.date || 'N/A'}</td>
+                    <td>
+                        <button onclick="viewSupplierDetails(${index})" class="action-btn details-btn"><i class="fas fa-info-circle"></i></button>
+                        <button onclick="editSupplier(${index})" class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteSupplier(${index})" class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
+                        <button onclick="makeSupplierPayment(${index})" class="action-btn payment-btn"><i class="fas fa-money-bill"></i></button>
+                    </td>
+                `;
+                suppliersTable.appendChild(row);
+            });
+            
+            // Update supplier dropdowns
+            updateSupplierDropdowns();
+        }
+
+        function addNewSupplier() {
+            const name = document.getElementById('supplier-name').value.trim();
+            const contact = document.getElementById('supplier-contact').value.trim();
+            const address = document.getElementById('supplier-address').value.trim();
+            const date = document.getElementById('supplier-date').value;
+            const balance = parseFloat(document.getElementById('supplier-balance').value) || 0;
+
+            if (!name) {
+                alert('Supplier name is required');
+                return;
+            }
+
+            suppliers.push({
+                name,
+                contact,
+                address,
+                date,
+                balance: balance,
+                transactions: []
+            });
+
+            saveSuppliers();
+            loadSuppliers();
+            
+            // Clear form
+            document.getElementById('supplier-name').value = '';
+            document.getElementById('supplier-contact').value = '';
+            document.getElementById('supplier-address').value = '';
+            document.getElementById('supplier-balance').value = '';
+        }
+
+        function editSupplier(index) {
+            const supplier = suppliers[index];
+            const newName = prompt('Enter new name:', supplier.name);
+            if (newName === null) return;
+
+            const newContact = prompt('Enter new contact:', supplier.contact || '');
+            const newAddress = prompt('Enter new address:', supplier.address || '');
+            const newDate = prompt('Enter new date:', supplier.date || '');
+            const newBalance = parseFloat(prompt('Enter new balance:', supplier.balance || 0));
+
+            suppliers[index] = {
+                ...supplier,
+                name: newName,
+                contact: newContact,
+                address: newAddress,
+                date: newDate,
+                balance: newBalance
+            };
+
+            saveSuppliers();
+            loadSuppliers();
+        }
+
+        function deleteSupplier(index) {
+            if (confirm('Are you sure you want to delete this supplier?')) {
+                suppliers.splice(index, 1);
+                saveSuppliers();
+                loadSuppliers();
+            }
+        }
+
+        function makeSupplierPayment(index) {
+            const supplier = suppliers[index];
+            document.getElementById('supplier-payment-modal').style.display = 'block';
+            
+            // Set the supplier in the payment form
+            const paymentSupplierSelect = document.getElementById('supplier-payment-customer');
+            paymentSupplierSelect.innerHTML = '';
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = `${supplier.name}`;
+            option.selected = true;
+            paymentSupplierSelect.appendChild(option);
+        }
+
+        function processSupplierPayment() {
+            const supplierIndex = parseInt(document.getElementById('supplier-payment-customer').value);
+            const amount = parseFloat(document.getElementById('supplier-payment-amount-input').value);
+            const method = document.getElementById('supplier-payment-method-input').value;
+            
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid payment amount');
+                return;
+            }
+            
+            const supplier = suppliers[supplierIndex];
+            
+            // Update supplier balance (negative balance means we owe them)
+            supplier.balance = (supplier.balance || 0) - amount;
+            
+            // Add transaction record
+            supplier.transactions.push({
+                date: new Date().toISOString(),
+                description: `Payment made (${method})`,
+                amount: -amount,
+                balance: supplier.balance,
+                type: 'payment'
+            });
+            
+            // Save changes
+            saveSuppliers();
+            loadSuppliers();
+            
+            // Close modal and reset form
+            closeModal('supplier-payment-modal');
+            document.getElementById('supplier-payment-amount-input').value = '';
+            
+            alert('Supplier payment processed successfully');
+        }
+
+        function viewSupplierDetails(index) {
+            const supplier = suppliers[index];
+            
+            // Get supplier items
+            const supplierItemsList = supplierItems.filter(item => item.supplierName === supplier.name);
+            
+            // Calculate total stock value
+            const totalStockValue = supplierItemsList.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            let detailsHtml = `
+                <div class="supplier-info">
+                    <div>
+                        <p><strong>Name:</strong> ${supplier.name}</p>
+                        <p><strong>Contact:</strong> ${supplier.contact || 'N/A'}</p>
+                    </div>
+                    <div>
+                        <p><strong>Address:</strong> ${supplier.address || 'N/A'}</p>
+                        <p><strong>Date Added:</strong> ${supplier.date || 'N/A'}</p>
+                    </div>
+                </div>
+                <div class="supplier-summary">
+                    <h3>Supplier Summary</h3>
+                    <p><strong>Current Balance:</strong> ${supplier.balance.toFixed(2)}</p>
+                    <p><strong>Total Items:</strong> ${supplierItemsList.length}</p>
+                    <p><strong>Total Stock Value:</strong> ${totalStockValue.toFixed(2)}</p>
+                </div>
+            `;
+            
+            if (supplier.transactions.length > 0) {
+                detailsHtml += `
+                    <div class="supplier-transactions">
+                        <h3>Transaction History</h3>
+                        <table class="transaction-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                supplier.transactions.forEach(transaction => {
+                    const amountClass = transaction.amount < 0 ? 'text-danger' : 'text-success';
+                    detailsHtml += `
+                        <tr>
+                            <td>${new Date(transaction.date).toLocaleDateString()}</td>
+                            <td>${transaction.description}</td>
+                            <td class="${amountClass}">${transaction.amount.toFixed(2)}</td>
+                            <td>${transaction.balance.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+                
+                detailsHtml += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+            
+            if (supplierItemsList.length > 0) {
+                detailsHtml += `
+                    <div class="supplier-transactions">
+                        <h3>Supplier Items</h3>
+                        <table class="transaction-table">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Weight/Unit</th>
+                                    <th>Total Weight</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                supplierItemsList.forEach(item => {
+                    detailsHtml += `
+                        <tr>
+                            <td>${item.itemName}</td>
+                            <td>${item.price.toFixed(2)}</td>
+                            <td>${item.quantity}</td>
+                            <td>${item.weightPerUnit.toFixed(2)}</td>
+                            <td>${(item.quantity * item.weightPerUnit).toFixed(2)}</td>
+                            <td>${(item.price * item.quantity).toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+                
+                detailsHtml += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('supplier-details-content').innerHTML = detailsHtml;
+            document.getElementById('supplier-details-modal').style.display = 'block';
+        }
+
+        function updateSupplierDropdowns() {
+            const supplierStockSelect = document.getElementById('supplier-stock');
+            const transferSupplierSelect = document.getElementById('transfer-supplier');
+            
+            // Clear existing options
+            supplierStockSelect.innerHTML = '<option value="">Select Supplier</option>';
+            transferSupplierSelect.innerHTML = '<option value="">Select Supplier</option>';
+            
+            suppliers.forEach(supplier => {
+                const option1 = document.createElement('option');
+                option1.value = supplier.name;
+                option1.textContent = supplier.name;
+                supplierStockSelect.appendChild(option1);
+                
+                const option2 = document.createElement('option');
+                option2.value = supplier.name;
+                option2.textContent = supplier.name;
+                transferSupplierSelect.appendChild(option2);
+            });
+        }
+
+        function saveSuppliers() {
+            localStorage.setItem('suppliers', JSON.stringify(suppliers));
+        }
+
+        // Supplier Items Management
+        function loadSupplierItems() {
+            const supplierTable = document.getElementById('supplier-table').querySelector('tbody');
+            supplierTable.innerHTML = '';
+            
+            supplierItems.forEach((item, index) => {
+                const totalWeight = item.quantity * item.weightPerUnit;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.supplierName}</td>
+                    <td>${item.itemName}</td>
+                    <td>${item.price.toFixed(2)}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.weightPerUnit.toFixed(2)}</td>
+                    <td>${totalWeight.toFixed(2)}</td>
+                    <td>${(item.price * item.quantity).toFixed(2)}</td>
+                    <td>
+                        <button onclick="deleteSupplierItem(${index})" class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                supplierTable.appendChild(row);
+            });
+            
+            // Update transfer dropdowns
+            updateTransferDropdowns();
+        }
+
+        function addSupplierItem() {
+            const supplierName = document.getElementById('supplier-stock').value;
+            const itemName = document.getElementById('supplier-item').value.trim();
+            const quantity = parseInt(document.getElementById('supplier-quantity').value);
+            const price = parseFloat(document.getElementById('supplier-price').value);
+            const weightPerUnit = parseFloat(document.getElementById('supplier-weight').value);
+
+            if (!supplierName || !itemName || isNaN(quantity) || isNaN(price) || isNaN(weightPerUnit)) {
+                alert('Please fill all fields with valid data');
+                return;
+            }
+
+            // Check if supplier item already exists
+            const existingItemIndex = supplierItems.findIndex(item => 
+                item.supplierName === supplierName && item.itemName.toLowerCase() === itemName.toLowerCase()
+            );
+            
+            if (existingItemIndex !== -1) {
+                // Update existing item
+                supplierItems[existingItemIndex].quantity += quantity;
+                supplierItems[existingItemIndex].price = price; // Update price
+                supplierItems[existingItemIndex].weightPerUnit = weightPerUnit; // Update weight
+            } else {
+                // Add new item
+                supplierItems.push({ 
+                    supplierName, 
+                    itemName, 
+                    quantity, 
+                    price,
+                    weightPerUnit
+                });
+            }
+
+            saveSupplierItems();
+            loadSupplierItems();
+            
+            // Clear form
+            document.getElementById('supplier-item').value = '';
+            document.getElementById('supplier-quantity').value = '';
+            document.getElementById('supplier-price').value = '';
+            document.getElementById('supplier-weight').value = '';
+        }
+
+        function deleteSupplierItem(index) {
+            if (confirm('Are you sure you want to delete this supplier item?')) {
+                supplierItems.splice(index, 1);
+                saveSupplierItems();
+                loadSupplierItems();
+            }
+        }
+
+        function toggleTransferCustomer() {
+            const transferType = document.getElementById('transfer-type').value;
+            const customerSelect = document.getElementById('transfer-customer');
+            
+            if (transferType === 'retailer') {
+                customerSelect.disabled = true;
+                customerSelect.value = '';
+            } else {
+                customerSelect.disabled = false;
+            }
+        }
+
+        function updateTransferDropdowns() {
+            const supplierSelect = document.getElementById('transfer-supplier');
+            const itemSelect = document.getElementById('transfer-item');
+            const customerSelect = document.getElementById('transfer-customer');
+            
+            // Update customer dropdown
+            customerSelect.innerHTML = '<option value="">Select Customer</option>';
+            customers.forEach((customer, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${customer.name} (${customer.phone || 'No phone'})`;
+                customerSelect.appendChild(option);
+            });
+            
+            // Update items when supplier changes
+            supplierSelect.addEventListener('change', function() {
+                const selectedSupplier = this.value;
+                itemSelect.innerHTML = '<option value="">Select Item</option>';
+                
+                if (selectedSupplier) {
+                    const supplierItemsList = supplierItems.filter(item => item.supplierName === selectedSupplier);
+                    
+                    supplierItemsList.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item.itemName;
+                        option.textContent = `${item.itemName} (${item.quantity} available, ${item.weightPerUnit} weight/unit)`;
+                        option.dataset.quantity = item.quantity;
+                        option.dataset.price = item.price;
+                        option.dataset.weight = item.weightPerUnit;
+                        itemSelect.appendChild(option);
+                    });
+                }
+            });
+            
+            // Update price and show weight info when item changes
+            itemSelect.addEventListener('change', function() {
+                const selectedItem = this.value;
+                if (selectedItem) {
+                    const selectedOption = this.options[this.selectedIndex];
+                    document.getElementById('transfer-price').value = selectedOption.dataset.price || '';
+                    
+                    // Show weight information
+                    const weightInfo = document.createElement('div');
+                    weightInfo.className = 'weight-info';
+                    weightInfo.innerHTML = `
+                        <p><strong>Weight per unit:</strong> ${selectedOption.dataset.weight}</p>
+                        <p><strong>Total available weight:</strong> ${(selectedOption.dataset.quantity * selectedOption.dataset.weight).toFixed(2)}</p>
+                    `;
+                    
+                    // Remove existing weight info
+                    const existingWeightInfo = document.querySelector('.weight-info');
+                    if (existingWeightInfo) {
+                        existingWeightInfo.remove();
+                    }
+                    
+                    this.parentNode.appendChild(weightInfo);
+                }
+            });
+        }
+
+        function transferStockToCustomer() {
+            const supplier = document.getElementById('transfer-supplier').value;
+            const item = document.getElementById('transfer-item').value;
+            const transferType = document.getElementById('transfer-type').value;
+            const customerIndex = transferType === 'customer' ? parseInt(document.getElementById('transfer-customer').value) : null;
+            const quantity = parseInt(document.getElementById('transfer-quantity').value);
+            const price = parseFloat(document.getElementById('transfer-price').value);
+            const notes = document.getElementById('transfer-notes').value.trim();
+
+            if (!supplier || !item || isNaN(quantity) || quantity <= 0 || isNaN(price)) {
+                alert('Please fill all fields with valid data');
+                return;
+            }
+
+            // Find supplier item
+            const supplierItemIndex = supplierItems.findIndex(s => s.supplierName === supplier && s.itemName === item);
+            
+            if (supplierItemIndex === -1) {
+                alert('Supplier item not found');
+                return;
+            }
+
+            const supplierItem = supplierItems[supplierItemIndex];
+            
+            if (quantity > supplierItem.quantity) {
+                alert(`Only ${supplierItem.quantity} available in supplier stock`);
+                return;
+            }
+
+            // Update supplier quantity and weight
+            supplierItem.quantity -= quantity;
+            
+            if (transferType === 'customer' && customerIndex !== null) {
+                // Add to customer credit
+                const customer = customers[customerIndex];
+                const totalAmount = price * quantity;
+                customer.balance += totalAmount;
+                
+                // Add transaction record
+                customer.transactions.push({
+                    date: new Date().toISOString(),
+                    description: `Stock transfer: ${quantity} x ${item} from ${supplier}`,
+                    amount: totalAmount,
+                    balance: customer.balance,
+                    type: 'stock_transfer',
+                    notes: notes
+                });
+            } else {
+                // Transfer to retailer (add to retail inventory)
+                const existingItemIndex = inventory.findIndex(i => i.name.toLowerCase() === item.toLowerCase());
+                
+                if (existingItemIndex !== -1) {
+                    // Update existing item
+                    inventory[existingItemIndex].quantity += quantity;
+                } else {
+                    // Add new item
+                    inventory.push({
+                        name: item,
+                        price: price,
+                        quantity: quantity
+                    });
+                }
+                
+                saveInventory();
+                loadInventory();
+            }
+            
+            // Add to inventory history
+            inventoryHistory.push({
+                itemName: item,
+                price: price,
+                quantity: quantity,
+                weight: quantity * supplierItem.weightPerUnit,
+                date: new Date().toLocaleString(),
+                type: transferType === 'customer' ? 'Transfer to Customer' : 'Transfer to Retailer',
+                notes: notes,
+                customer: transferType === 'customer' ? customers[customerIndex].name : 'Retailer',
+                supplier: supplier
+            });
+
+            // Generate transfer invoice
+            if (transferType === 'customer') {
+                generateTransferInvoice(supplier, customers[customerIndex], item, quantity, price, totalAmount, notes);
+            }
+
+            // Save changes
+            saveSupplierItems();
+            saveCustomers();
+            saveInventoryHistory();
+            
+            // Reload data
+            loadSupplierItems();
+            loadCustomers();
+            
+            // Clear form
+            document.getElementById('transfer-quantity').value = '';
+            document.getElementById('transfer-price').value = '';
+            document.getElementById('transfer-notes').value = '';
+            
+            alert('Stock transferred successfully');
+        }
+
+        function generateTransferInvoice(supplier, customer, item, quantity, price, totalAmount, notes) {
+            // Set invoice details
+            document.getElementById('invoice-number').textContent = `TRF-${new Date().getTime()}`;
+            document.getElementById('invoice-date').textContent = new Date().toLocaleDateString();
+            
+            // Set customer details
+            document.getElementById('bill-customer-name').textContent = customer.name;
+            document.getElementById('bill-customer-phone').textContent = customer.phone || 'N/A';
+            document.getElementById('bill-customer-address').textContent = customer.address || 'N/A';
+            
+            // Add items to bill
+            const billItems = document.getElementById('bill-items');
+            billItems.innerHTML = '';
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item} (From: ${supplier})</td>
+                <td>${price.toFixed(2)}</td>
+                <td>${quantity}</td>
+                <td>${totalAmount.toFixed(2)}</td>
+            `;
+            billItems.appendChild(row);
+            
+            // Set totals
+            document.getElementById('bill-subtotal').textContent = totalAmount.toFixed(2);
+            document.getElementById('bill-paid').textContent = '0.00';
+            document.getElementById('bill-balance').textContent = totalAmount.toFixed(2);
+            
+            // Add notes if available
+            if (notes) {
+                document.querySelector('.bill-notes p:last-child').textContent = notes;
+            }
+            
+            // Show modal
+            document.getElementById('bill-modal').style.display = 'block';
+        }
+
+        function saveSupplierItems() {
+            localStorage.setItem('supplierItems', JSON.stringify(supplierItems));
+        }
+
+        // Customer Management
+        function loadCustomers() {
+            const customersTable = document.getElementById('customers-table').querySelector('tbody');
+            customersTable.innerHTML = '';
+            
+            customers.forEach((customer, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${customer.name}</td>
+                    <td>${customer.phone || 'N/A'}</td>
+                    <td>${customer.address || 'N/A'}</td>
+                    <td>${customer.balance ? customer.balance.toFixed(2) : '0.00'}</td>
+                    <td>${customer.date || 'N/A'}</td>
+                    <td>
+                        <button onclick="viewCustomerDetails(${index})" class="action-btn details-btn"><i class="fas fa-info-circle"></i></button>
+                        <button onclick="editCustomer(${index})" class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteCustomer(${index})" class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
+                        <button onclick="makePayment(${index})" class="action-btn payment-btn"><i class="fas fa-money-bill"></i></button>
+                    </td>
+                `;
+                customersTable.appendChild(row);
+            });
+        }
+
+        function addPaymentButtonToCustomers() {
+            // This function ensures payment button is added to customer rows
+            // The button is already included in the loadCustomers function above
+        }
+
+        function addNewCustomer() {
+            const name = document.getElementById('customer-name').value.trim();
+            const phone = document.getElementById('customer-phone').value.trim();
+            const address = document.getElementById('customer-address').value.trim();
+            const date = document.getElementById('customer-date').value;
+            const balance = parseFloat(document.getElementById('customer-balance').value) || 0;
+
+            if (!name) {
+                alert('Customer name is required');
+                return;
+            }
+
+            customers.push({
+                name,
+                phone,
+                address,
+                date,
+                balance: balance,
+                transactions: []
+            });
+
+            saveCustomers();
+            loadCustomers();
+            
+            // Clear form
+            document.getElementById('customer-name').value = '';
+            document.getElementById('customer-phone').value = '';
+            document.getElementById('customer-address').value = '';
+            document.getElementById('customer-balance').value = '';
+        }
+
+        function viewCustomerDetails(index) {
+            const customer = customers[index];
+            
+            let detailsHtml = `
+                <div class="customer-info">
+                    <div>
+                        <p><strong>Name:</strong> ${customer.name}</p>
+                        <p><strong>Phone:</strong> ${customer.phone || 'N/A'}</p>
+                    </div>
+                    <div>
+                        <p><strong>Address:</strong> ${customer.address || 'N/A'}</p>
+                        <p><strong>Date Added:</strong> ${customer.date || 'N/A'}</p>
+                    </div>
+                </div>
+                <div class="customer-summary">
+                    <h3>Account Summary</h3>
+                    <p><strong>Current Balance:</strong> ${customer.balance.toFixed(2)}</p>
+                    <p><strong>Note:</strong> Positive balance means customer owes money, negative means customer has credit</p>
+                </div>
+            `;
+            
+            if (customer.transactions.length > 0) {
+                detailsHtml += `
+                    <div class="customer-transactions">
+                        <h3>Transaction History</h3>
+                        <table class="transaction-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Balance</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                customer.transactions.forEach(transaction => {
+                    const amountClass = transaction.amount > 0 ? 'text-danger' : 'text-success';
+                    detailsHtml += `
+                        <tr>
+                            <td>${new Date(transaction.date).toLocaleDateString()}</td>
+                            <td>${transaction.description}</td>
+                            <td class="${amountClass}">${transaction.amount > 0 ? '+' : ''}${transaction.amount.toFixed(2)}</td>
+                            <td>${transaction.balance.toFixed(2)}</td>
+                            <td>${transaction.notes || ''}</td>
+                        </tr>
+                    `;
+                });
+                
+                detailsHtml += `
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } else {
+                detailsHtml += '<p>No transactions recorded for this customer.</p>';
+            }
+            
+            document.getElementById('customer-details-content').innerHTML = detailsHtml;
+            document.getElementById('customer-details-modal').style.display = 'block';
+        }
+
+        function editCustomer(index) {
+            const customer = customers[index];
+            const newName = prompt('Enter new name:', customer.name);
+            if (newName === null) return;
+
+            const newPhone = prompt('Enter new phone:', customer.phone || '');
+            const newAddress = prompt('Enter new address:', customer.address || '');
+            const newDate = prompt('Enter new date:', customer.date || '');
+            const newBalance = parseFloat(prompt('Enter new balance:', customer.balance || 0));
+
+            customers[index] = {
+                ...customer,
+                name: newName,
+                phone: newPhone,
+                address: newAddress,
+                date: newDate,
+                balance: newBalance
+            };
+
+            saveCustomers();
+            loadCustomers();
+        }
+
+        function deleteCustomer(index) {
+            if (confirm('Are you sure you want to delete this customer?')) {
+                customers.splice(index, 1);
+                saveCustomers();
+                loadCustomers();
+            }
+        }
+
+        function makePayment(index) {
+            const customer = customers[index];
+            document.getElementById('payment-modal').style.display = 'block';
+            
+            // Set the customer in the payment form
+            const paymentCustomerSelect = document.getElementById('payment-customer');
+            paymentCustomerSelect.innerHTML = '';
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = `${customer.name} (Balance: ${customer.balance.toFixed(2)})`;
+            option.selected = true;
+            paymentCustomerSelect.appendChild(option);
+        }
+
+        function processPayment() {
+            const customerIndex = parseInt(document.getElementById('payment-customer').value);
+            const amount = parseFloat(document.getElementById('payment-amount-input').value);
+            const method = document.getElementById('payment-method-input').value;
+            
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid payment amount');
+                return;
+            }
+            
+            const customer = customers[customerIndex];
+            
+            // Update customer balance (negative amount reduces what they owe)
+            customer.balance -= amount;
+            
+            // Add transaction record
+            customer.transactions.push({
+                date: new Date().toISOString(),
+                description: `Payment received (${method})`,
+                amount: -amount,
+                balance: customer.balance,
+                type: 'payment'
+            });
+            
+            // Save changes
+            saveCustomers();
+            loadCustomers();
+            
+            // Generate payment receipt
+            generatePaymentReceipt(customer, amount, method);
+            
+            // Close modal and reset form
+            closeModal('payment-modal');
+            document.getElementById('payment-amount-input').value = '';
+        }
+
+        function generatePaymentReceipt(customer, amount, method) {
+            // Set invoice details
+            document.getElementById('invoice-number').textContent = `PAY-${new Date().getTime()}`;
+            document.getElementById('invoice-date').textContent = new Date().toLocaleDateString();
+            
+            // Set customer details
+            document.getElementById('bill-customer-name').textContent = customer.name;
+            document.getElementById('bill-customer-phone').textContent = customer.phone || 'N/A';
+            document.getElementById('bill-customer-address').textContent = customer.address || 'N/A';
+            
+            // Add payment details to bill
+            const billItems = document.getElementById('bill-items');
+            billItems.innerHTML = '';
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>Payment Received (${method})</td>
+                <td>${amount.toFixed(2)}</td>
+                <td>1</td>
+                <td>${amount.toFixed(2)}</td>
+            `;
+            billItems.appendChild(row);
+            
+            // Set totals
+            document.getElementById('bill-subtotal').textContent = amount.toFixed(2);
+            document.getElementById('bill-paid').textContent = amount.toFixed(2);
+            document.getElementById('bill-balance').textContent = '0.00';
+            
+            // Show modal
+            document.getElementById('bill-modal').style.display = 'block';
+        }
+
+        function saveCustomers() {
+            localStorage.setItem('customers', JSON.stringify(customers));
+        }
+
+        // Sales Management
+        function setupSalesTab() {
+            // Populate customer dropdown
+            const saleCustomerSelect = document.getElementById('sale-customer');
+            saleCustomerSelect.innerHTML = '<option value="">Select Customer</option>';
+            customers.forEach((customer, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = `${customer.name} (${customer.phone || 'No phone'})`;
+                saleCustomerSelect.appendChild(option);
+            });
+
+            // Populate item dropdown
+            const saleItemSelect = document.getElementById('sale-item');
+            saleItemSelect.innerHTML = '<option value="">Select Item</option>';
+            inventory.forEach((item, index) => {
+                if (item.quantity > 0) {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = `${item.name} (${item.quantity} available)`;
+                    option.dataset.price = item.price;
+                    saleItemSelect.appendChild(option);
+                }
+            });
+
+            // Update cart total when payment amount changes
+            document.getElementById('payment-amount').addEventListener('input', updateCartBalance);
+            
+            // Load empty cart
+            updateCart();
+        }
+
+        function updateSalePrice() {
+            const itemIndex = document.getElementById('sale-item').value;
+            if (itemIndex && itemIndex !== "") {
+                const item = inventory[itemIndex];
+                document.getElementById('sale-price').value = item.price.toFixed(2);
+            }
+        }
+
+        function updateCartBalance() {
+            const paymentAmount = parseFloat(document.getElementById('payment-amount').value) || 0;
+            const total = parseFloat(document.getElementById('cart-total').textContent);
+            document.getElementById('cart-balance').textContent = (total - paymentAmount).toFixed(2);
+        }
+
+        function addToCart() {
+            const itemIndex = parseInt(document.getElementById('sale-item').value);
+            const quantity = parseInt(document.getElementById('sale-quantity').value);
+            const price = parseFloat(document.getElementById('sale-price').value);
+
+            if (isNaN(itemIndex)) {
+                alert('Please select an item');
+                return;
+            }
+
+            if (isNaN(quantity) || quantity < 1) {
+                alert('Please enter a valid quantity');
+                return;
+            }
+
+            if (isNaN(price) || price <= 0) {
+                alert('Please enter a valid price');
+                return;
+            }
+
+            const item = inventory[itemIndex];
+            
+            if (quantity > item.quantity) {
+                alert(`Only ${item.quantity} available in stock`);
+                return;
+            }
+
+            // Check if item already in cart
+            const existingItemIndex = cart.findIndex(cartItem => cartItem.itemIndex === itemIndex);
+            
+            if (existingItemIndex !== -1) {
+                // Update quantity if already in cart
+                const newQty = cart[existingItemIndex].quantity + quantity;
+                
+                if (newQty > item.quantity) {
+                    alert(`Cannot add more than available stock (${item.quantity})`);
+                    return;
+                }
+                
+                cart[existingItemIndex].quantity = newQty;
+                cart[existingItemIndex].price = price; // Update price to the new entered price
+            } else {
+                // Add new item to cart
+                cart.push({
+                    itemIndex,
+                    quantity,
+                    price
+                });
+            }
+
+            updateCart();
+            document.getElementById('sale-quantity').value = 1;
+        }
+
+        function updateCart() {
+            const cartTable = document.getElementById('cart-table').querySelector('tbody');
+            cartTable.innerHTML = '';
+            let total = 0;
+
+            cart.forEach((cartItem, index) => {
+                const item = inventory[cartItem.itemIndex];
+                const itemTotal = cartItem.quantity * cartItem.price;
+                total += itemTotal;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${cartItem.price.toFixed(2)}</td>
+                    <td>${cartItem.quantity}</td>
+                    <td>${itemTotal.toFixed(2)}</td>
+                    <td><button onclick="removeFromCart(${index})" class="action-btn delete-btn"><i class="fas fa-trash"></i></button></td>
+                `;
+                cartTable.appendChild(row);
+            });
+
+            document.getElementById('cart-total').textContent = total.toFixed(2);
+            updateCartBalance();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function completeSale() {
+            if (cart.length === 0) {
+                alert('Cart is empty');
+                return;
+            }
+
+            const saleDate = document.getElementById('sale-date').value || new Date().toISOString().split('T')[0];
+            const customerIndex = document.getElementById('sale-customer').value ? 
+                parseInt(document.getElementById('sale-customer').value) : null;
+            const paymentAmount = parseFloat(document.getElementById('payment-amount').value) || 0;
+            const paymentMethod = document.getElementById('payment-method').value;
+            const total = parseFloat(document.getElementById('cart-total').textContent);
+            const balance = total - paymentAmount;
+
+            // Check if customer is selected for credit sales
+            if (balance > 0 && customerIndex === null) {
+                alert('Please select a customer for credit sales');
+                return;
+            }
+
+            // Create sale record
+            const sale = {
+                date: saleDate,
+                customerIndex,
+                items: cart.map(cartItem => ({
+                    itemIndex: cartItem.itemIndex,
+                    quantity: cartItem.quantity,
+                    price: cartItem.price
+                })),
+                total,
+                paymentAmount,
+                paymentMethod,
+                balance
+            };
+
+            // Update inventory and add to history
+            cart.forEach(cartItem => {
+                inventory[cartItem.itemIndex].quantity -= cartItem.quantity;
+                
+                // Add to inventory history (sale)
+                inventoryHistory.push({
+                    itemName: inventory[cartItem.itemIndex].name,
+                    price: cartItem.price,
+                    quantity: -cartItem.quantity, // Negative quantity for sales
+                    date: new Date().toLocaleString(),
+                    type: 'Sale'
+                });
+            });
+
+            // Update customer balance if applicable
+            if (customerIndex !== null && balance > 0) {
+                customers[customerIndex].balance += balance;
+                
+                // Add transaction record
+                customers[customerIndex].transactions.push({
+                    date: new Date().toISOString(),
+                    description: `Sale - Invoice #${sales.length + 1}`,
+                    amount: balance,
+                    balance: customers[customerIndex].balance,
+                    type: 'sale'
+                });
+            }
+
+            // Record sale in current day
+            if (currentDay) {
+                currentDay.sales.push({
+                    amount: total,
+                    time: new Date().toLocaleTimeString()
+                });
+                updateSalesmanSummary();
+                saveSalesmanData();
+            }
+
+            // Save all changes
+            sales.push(sale);
+            saveSales();
+            saveInventory();
+            saveInventoryHistory();
+            saveCustomers();
+
+            // Generate and show bill
+            generateBill(sale, sales.length - 1);
+
+            // Reset cart and form
+            cart = [];
+            updateCart();
+            document.getElementById('payment-amount').value = '';
+            document.getElementById('sale-customer').value = '';
+            document.getElementById('payment-method').value = 'cash';
+        }
+
+        function generateBill(sale, saleIndex) {
+            // Set invoice details
+            document.getElementById('invoice-number').textContent = `INV-${(saleIndex + 1).toString().padStart(5, '0')}`;
+            document.getElementById('invoice-date').textContent = sale.date;
+            
+            // Set customer details if available
+            if (sale.customerIndex !== null) {
+                const customer = customers[sale.customerIndex];
+                document.getElementById('bill-customer-name').textContent = customer.name;
+                document.getElementById('bill-customer-phone').textContent = customer.phone || 'N/A';
+                document.getElementById('bill-customer-address').textContent = customer.address || 'N/A';
+            } else {
+                document.getElementById('bill-customer-name').textContent = 'Walk-in Customer';
+                document.getElementById('bill-customer-phone').textContent = 'N/A';
+                document.getElementById('bill-customer-address').textContent = 'N/A';
+            }
+            
+            // Add items to bill
+            const billItems = document.getElementById('bill-items');
+            billItems.innerHTML = '';
+            
+            sale.items.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${inventory[item.itemIndex].name}</td>
+                    <td>${item.price.toFixed(2)}</td>
+                    <td>${item.quantity}</td>
+                    <td>${(item.price * item.quantity).toFixed(2)}</td>
+                `;
+                billItems.appendChild(row);
+            });
+            
+            // Set totals
+            document.getElementById('bill-subtotal').textContent = sale.total.toFixed(2);
+            document.getElementById('bill-paid').textContent = sale.paymentAmount.toFixed(2);
+            document.getElementById('bill-balance').textContent = sale.balance.toFixed(2);
+            
+            // Show modal
+            document.getElementById('bill-modal').style.display = 'block';
+        }
+
+        function printBill() {
+            window.print();
+        }
+
+        function downloadBill() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            html2canvas(document.querySelector('.bill-content')).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = 210; // A4 width in mm
+                const pageHeight = 295; // A4 height in mm
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+                
+                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                
+                // Add new page if content is too long
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    doc.addPage();
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                
+                doc.save(`invoice_${document.getElementById('invoice-number').textContent}.pdf`);
+            });
+        }
+
+        function shareBill() {
+            if (navigator.share) {
+                html2canvas(document.querySelector('.bill-content')).then(canvas => {
+                    canvas.toBlob(function(blob) {
+                        const file = new File([blob], `invoice_${document.getElementById('invoice-number').textContent}.png`, { type: 'image/png' });
+                        navigator.share({
+                            title: 'Invoice',
+                            text: 'Invoice from Abdullah Hafiz Traders',
+                            files: [file]
+                        }).catch(error => {
+                            console.log('Sharing failed', error);
+                            alert('Sharing failed. You can download the invoice instead.');
+                        });
+                    });
+                });
+            } else {
+                alert('Web Share API is not supported in your browser. You can download the invoice instead.');
+            }
+        }
+
+        function saveSales() {
+            localStorage.setItem('sales', JSON.stringify(sales));
+        }
+
+        // Salesman Management
+        function setupSalesmanTab() {
+            const today = new Date().toISOString().split('T')[0];
+            const existingDay = salesmanDays.find(day => day.date === today);
+            
+            if (existingDay) {
+                currentDay = existingDay;
+            } else {
+                currentDay = {
+                    date: today,
+                    sales: [],
+                    expenses: [],
+                    bankTransfers: []
+                };
+            }
+            
+            updateSalesmanSummary();
+        }
+
+        function startNewDay() {
+            const date = document.getElementById('salesman-date').value;
+            
+            if (!date) {
+                alert('Please select a date');
+                return;
+            }
+            
+            // Check if day already exists
+            const existingDayIndex = salesmanDays.findIndex(day => day.date === date);
+            
+            if (existingDayIndex !== -1) {
+                if (confirm('A record for this date already exists. Do you want to continue with it?')) {
+                    currentDay = salesmanDays[existingDayIndex];
+                } else {
+                    return;
+                }
+            } else {
+                currentDay = {
+                    date,
+                    sales: [],
+                    expenses: [],
+                    bankTransfers: []
+                };
+                salesmanDays.push(currentDay);
+            }
+            
+            updateSalesmanSummary();
+            saveSalesmanData();
+            alert('New day started successfully');
+        }
+
+        function updateSalesmanSummary() {
+            document.getElementById('current-day-date').textContent = currentDay.date;
+            
+            const totalSales = currentDay.sales.reduce((sum, sale) => sum + sale.amount, 0);
+            const totalExpenses = currentDay.expenses.reduce((sum, exp) => sum + exp.amount, 0);
+            const totalBankTransfers = currentDay.bankTransfers.reduce((sum, transfer) => sum + transfer.amount, 0);
+            const remainingAmount = totalSales - totalExpenses - totalBankTransfers;
+            
+            document.getElementById('total-sales').textContent = totalSales.toFixed(2);
+            document.getElementById('total-expenses').textContent = totalExpenses.toFixed(2);
+            document.getElementById('amount-to-bank').textContent = totalBankTransfers.toFixed(2);
+            document.getElementById('remaining-amount').textContent = remainingAmount.toFixed(2);
+            
+            // Update expenses table
+            const expensesTable = document.getElementById('expenses-table').querySelector('tbody');
+            expensesTable.innerHTML = '';
+            
+            currentDay.expenses.forEach((expense, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${expense.description}</td>
+                    <td>${expense.amount.toFixed(2)}</td>
+                    <td>${expense.time}</td>
+                    <td><button onclick="deleteExpense(${index})" class="action-btn delete-btn"><i class="fas fa-trash"></i></button></td>
+                `;
+                expensesTable.appendChild(row);
+            });
+        }
+
+        function addExpense() {
+            const description = document.getElementById('expense-description').value.trim();
+            const amount = parseFloat(document.getElementById('expense-amount').value);
+            
+            if (!description || isNaN(amount) || amount <= 0) {
+                alert('Please enter valid description and amount');
+                return;
+            }
+            
+            currentDay.expenses.push({
+                description,
+                amount,
+                time: new Date().toLocaleTimeString()
+            });
+            
+            // Save to all days
+            const existingDayIndex = salesmanDays.findIndex(day => day.date === currentDay.date);
+            if (existingDayIndex !== -1) {
+                salesmanDays[existingDayIndex] = currentDay;
+            } else {
+                salesmanDays.push(currentDay);
+            }
+            
+            saveSalesmanData();
+            updateSalesmanSummary();
+            
+            // Clear form
+            document.getElementById('expense-description').value = '';
+            document.getElementById('expense-amount').value = '';
+        }
+
+        function addManualSale() {
+            const amount = parseFloat(document.getElementById('manual-sale-amount').value);
+            
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid sale amount');
+                return;
+            }
+            
+            currentDay.sales.push({
+                amount,
+                time: new Date().toLocaleTimeString()
+            });
+            
+            // Save to all days
+            const existingDayIndex = salesmanDays.findIndex(day => day.date === currentDay.date);
+            if (existingDayIndex !== -1) {
+                salesmanDays[existingDayIndex] = currentDay;
+            } else {
+                salesmanDays.push(currentDay);
+            }
+            
+            saveSalesmanData();
+            updateSalesmanSummary();
+            
+            // Clear form
+            document.getElementById('manual-sale-amount').value = '';
+        }
+
+        function sendToBank() {
+            const amount = parseFloat(document.getElementById('bank-amount').value);
+            
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+            
+            const totalSales = currentDay.sales.reduce((sum, sale) => sum + sale.amount, 0);
+            const totalExpenses = currentDay.expenses.reduce((sum, exp) => sum + exp.amount, 0);
+            const totalBankTransfers = currentDay.bankTransfers.reduce((sum, transfer) => sum + transfer.amount, 0);
+            const availableAmount = totalSales - totalExpenses - totalBankTransfers;
+            
+            if (amount > availableAmount) {
+                alert(`Only ${availableAmount.toFixed(2)} available to send to bank`);
+                return;
+            }
+            
+            currentDay.bankTransfers.push({
+                amount,
+                time: new Date().toLocaleTimeString()
+            });
+            
+            // Add bank transaction
+            bankTransactions.push({
+                date: currentDay.date,
+                type: 'deposit',
+                amount: amount,
+                source: 'salesman',
+                description: 'Daily sales deposit',
+                time: new Date().toLocaleTimeString()
+            });
+            
+            // Save to all days
+            const existingDayIndex = salesmanDays.findIndex(day => day.date === currentDay.date);
+            if (existingDayIndex !== -1) {
+                salesmanDays[existingDayIndex] = currentDay;
+            } else {
+                salesmanDays.push(currentDay);
+            }
+            
+            saveSalesmanData();
+            saveBankTransactions();
+            updateSalesmanSummary();
+            updateBankSummary();
+            
+            // Clear form
+            document.getElementById('bank-amount').value = '';
+            
+            alert('Amount sent to bank successfully');
+        }
+
+        function deleteExpense(index) {
+            if (confirm('Are you sure you want to delete this expense?')) {
+                currentDay.expenses.splice(index, 1);
+                
+                // Save to all days
+                const existingDayIndex = salesmanDays.findIndex(day => day.date === currentDay.date);
+                if (existingDayIndex !== -1) {
+                    salesmanDays[existingDayIndex] = currentDay;
+                }
+                
+                saveSalesmanData();
+                updateSalesmanSummary();
+            }
+        }
+
+        function saveSalesmanData() {
+            localStorage.setItem('salesmanDays', JSON.stringify(salesmanDays));
+        }
+
+        // Recovery Person Management
+        function setupRecoveryTab() {
+            const today = new Date().toISOString().split('T')[0];
+            const existingDay = recoveryDays.find(day => day.date === today);
+            
+            if (existingDay) {
+                currentRecoveryDay = existingDay;
+            } else {
+                currentRecoveryDay = {
+                    date: today,
+                    recoveries: [],
+                    supplierPayments: [],
+                    expenses: [],
+                    bankTransfers: []
+                };
+            }
+            
+            updateRecoverySummary();
+            populateRecoveryDropdowns();
+        }
+
+        function startRecoveryDay() {
+            const date = document.getElementById('recovery-date').value;
+            
+            if (!date) {
+                alert('Please select a date');
+                return;
+            }
+            
+            // Check if day already exists
+            const existingDayIndex = recoveryDays.findIndex(day => day.date === date);
+            
+            if (existingDayIndex !== -1) {
+                if (confirm('A record for this date already exists. Do you want to continue with it?')) {
+                    currentRecoveryDay = recoveryDays[existingDayIndex];
+                } else {
+                    return;
+                }
+            } else {
+                currentRecoveryDay = {
+                    date,
+                    recoveries: [],
+                    supplierPayments: [],
+                    expenses: [],
+                    bankTransfers: []
+                };
+                recoveryDays.push(currentRecoveryDay);
+            }
+            
+            updateRecoverySummary();
+            saveRecoveryData();
+            alert('Recovery day started successfully');
+        }
+
+        function populateRecoveryDropdowns() {
+            // Populate customer dropdown
+            const recoveryCustomerSelect = document.getElementById('recovery-customer');
+            recoveryCustomerSelect.innerHTML = '<option value="">Select Customer</option>';
+            
+            customers.forEach((customer, index) => {
+                if (customer.balance > 0) {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = `${customer.name} (Balance: ${customer.balance.toFixed(2)})`;
+                    recoveryCustomerSelect.appendChild(option);
+                }
+            });
+            
+            // Populate supplier dropdown
+            const supplierPaymentSelect = document.getElementById('supplier-payment');
+            supplierPaymentSelect.innerHTML = '<option value="">Select Supplier</option>';
+            
+            // Get unique suppliers
+            const uniqueSuppliers = [...new Set(suppliers.map(s => s.name))];
+            
+            uniqueSuppliers.forEach(supplier => {
+                const option = document.createElement('option');
+                option.value = supplier;
+                option.textContent = supplier;
+                supplierPaymentSelect.appendChild(option);
+            });
+        }
+
+        function addRecovery() {
+            const customerIndex = parseInt(document.getElementById('recovery-customer').value);
+            const amount = parseFloat(document.getElementById('recovery-amount').value);
+            
+            if (isNaN(customerIndex) || isNaN(amount) || amount <= 0) {
+                alert('Please select a customer and enter a valid amount');
+                return;
+            }
+            
+            const customer = customers[customerIndex];
+            
+            if (amount > customer.balance) {
+                alert(`Amount cannot exceed customer balance (${customer.balance.toFixed(2)})`);
+                return;
+            }
+            
+            // Update customer balance
+            customer.balance -= amount;
+            
+            // Add transaction record
+            customer.transactions.push({
+                date: new Date().toISOString(),
+                description: `Payment received by recovery person`,
+                amount: -amount,
+                balance: customer.balance,
+                type: 'recovery'
+            });
+            
+            // Add to recovery day
+            currentRecoveryDay.recoveries.push({
+                customerIndex,
+                amount,
+                time: new Date().toLocaleTimeString()
+            });
+            
+            // Save to all days
+            const existingDayIndex = recoveryDays.findIndex(day => day.date === currentRecoveryDay.date);
+            if (existingDayIndex !== -1) {
+                recoveryDays[existingDayIndex] = currentRecoveryDay;
+            } else {
+                recoveryDays.push(currentRecoveryDay);
+            }
+            
+            // Save changes
+            saveCustomers();
+            saveRecoveryData();
+            updateRecoverySummary();
+            populateRecoveryDropdowns();
+            
+            // Clear form
+            document.getElementById('recovery-amount').value = '';
+            
+            alert('Recovery added successfully');
+        }
+
+        function addSupplierPayment() {
+            const supplier = document.getElementById('supplier-payment').value;
+            const amount = parseFloat(document.getElementById('supplier-payment-amount').value);
+            const account = document.getElementById('payment-account').value;
+            
+            if (!supplier || isNaN(amount) || amount <= 0) {
+                alert('Please select a supplier and enter a valid amount');
+                return;
+            }
+            
+            // Add to recovery day
+            currentRecoveryDay.supplierPayments.push({
+                supplier,
+                amount,
+                account,
+                time: new Date().toLocaleTimeString()
+            });
+            
+            // Save to all days
+            const existingDayIndex = recoveryDays.findIndex(day => day.date === currentRecoveryDay.date);
+            if (existingDayIndex !== -1) {
+                recoveryDays[existingDayIndex] = currentRecoveryDay;
+            } else {
+                recoveryDays.push(currentRecoveryDay);
+            }
+            
+            saveRecoveryData();
+            updateRecoverySummary();
+            
+            // Clear form
+            document.getElementById('supplier-payment-amount').value = '';
+            
+            alert('Supplier payment added successfully');
+        }
+
+        function addRecoveryExpense() {
+            const description = document.getElementById('recovery-expense-description').value.trim();
+            const amount = parseFloat(document.getElementById('recovery-expense-amount').value);
+            
+            if (!description || isNaN(amount) || amount <= 0) {
+                alert('Please enter valid description and amount');
+                return;
+            }
+            
+            // Add to recovery day
+            currentRecoveryDay.expenses.push({
+                description,
+                amount,
+                time: new Date().toLocaleTimeString()
+            });
+            
+            // Save to all days
+            const existingDayIndex = recoveryDays.findIndex(day => day.date === currentRecoveryDay.date);
+            if (existingDayIndex !== -1) {
+                recoveryDays[existingDayIndex] = currentRecoveryDay;
+            } else {
+                recoveryDays.push(currentRecoveryDay);
+            }
+            
+            saveRecoveryData();
+            updateRecoverySummary();
+            
+            // Clear form
+            document.getElementById('recovery-expense-description').value = '';
+            document.getElementById('recovery-expense-amount').value = '';
+            
+            alert('Recovery expense added successfully');
+        }
+
+        function sendRecoveryToBank() {
+            const amount = parseFloat(document.getElementById('recovery-bank-amount').value);
+            
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid amount');
+                return;
+            }
+            
+            const totalRecovered = currentRecoveryDay.recoveries.reduce((sum, r) => sum + r.amount, 0);
+            const totalPaid = currentRecoveryDay.supplierPayments.reduce((sum, p) => sum + p.amount, 0);
+            const totalExpenses = currentRecoveryDay.expenses.reduce((sum, e) => sum + e.amount, 0);
+            const totalBankTransfers = currentRecoveryDay.bankTransfers.reduce((sum, transfer) => sum + transfer.amount, 0);
+            const availableAmount = totalRecovered - totalPaid - totalExpenses - totalBankTransfers;
+            
+            if (amount > availableAmount) {
+                alert(`Only ${availableAmount.toFixed(2)} available to send to bank`);
+                return;
+            }
+            
+            currentRecoveryDay.bankTransfers.push({
+                amount,
+                time: new Date().toLocaleTimeString()
+            });
+            
+            // Add bank transaction
+            bankTransactions.push({
+                date: currentRecoveryDay.date,
+                type: 'deposit',
+                amount: amount,
+                source: 'recovery',
+                description: 'Recovery deposit',
+                time: new Date().toLocaleTimeString()
+            });
+            
+            // Save to all days
+            const existingDayIndex = recoveryDays.findIndex(day => day.date === currentRecoveryDay.date);
+            if (existingDayIndex !== -1) {
+                recoveryDays[existingDayIndex] = currentRecoveryDay;
+            } else {
+                recoveryDays.push(currentRecoveryDay);
+            }
+            
+            saveRecoveryData();
+            saveBankTransactions();
+            updateRecoverySummary();
+            updateBankSummary();
+            
+            // Clear form
+            document.getElementById('recovery-bank-amount').value = '';
+            
+            alert('Amount sent to bank successfully');
+        }
+
+        function updateRecoverySummary() {
+            const totalRecovered = currentRecoveryDay.recoveries.reduce((sum, r) => sum + r.amount, 0);
+            const totalPaid = currentRecoveryDay.supplierPayments.reduce((sum, p) => sum + p.amount, 0);
+            const totalExpenses = currentRecoveryDay.expenses.reduce((sum, e) => sum + e.amount, 0);
+            const totalBankTransfers = currentRecoveryDay.bankTransfers.reduce((sum, transfer) => sum + transfer.amount, 0);
+            const remaining = totalRecovered - totalPaid - totalExpenses - totalBankTransfers;
+            
+            document.getElementById('total-recovered').textContent = totalRecovered.toFixed(2);
+            document.getElementById('total-paid-suppliers').textContent = totalPaid.toFixed(2);
+            document.getElementById('total-recovery-expenses').textContent = totalExpenses.toFixed(2);
+            document.getElementById('recovery-remaining').textContent = remaining.toFixed(2);
+            
+            // Update recoveries table
+            const recoveriesTable = document.getElementById('recoveries-table').querySelector('tbody');
+            recoveriesTable.innerHTML = '';
+            
+            currentRecoveryDay.recoveries.forEach((recovery, index) => {
+                const customer = customers[recovery.customerIndex];
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${customer.name}</td>
+                    <td>${recovery.amount.toFixed(2)}</td>
+                    <td>${recovery.time}</td>
+                    <td><button onclick="deleteRecovery(${index})" class="action-btn delete-btn"><i class="fas fa-trash"></i></button></td>
+                `;
+                recoveriesTable.appendChild(row);
+            });
+            
+            // Update supplier payments table
+            const supplierPaymentsTable = document.getElementById('supplier-payments-table').querySelector('tbody');
+            supplierPaymentsTable.innerHTML = '';
+            
+            currentRecoveryDay.supplierPayments.forEach((payment, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${payment.supplier}</td>
+                    <td>${payment.amount.toFixed(2)}</td>
+                    <td>${payment.account}</td>
+                    <td>${payment.time}</td>
+                    <td><button onclick="deleteSupplierPayment(${index})" class="action-btn delete-btn"><i class="fas fa-trash"></i></button></td>
+                `;
+                supplierPaymentsTable.appendChild(row);
+            });
+            
+            // Update recovery expenses table
+            const recoveryExpensesTable = document.getElementById('recovery-expenses-table').querySelector('tbody');
+            recoveryExpensesTable.innerHTML = '';
+            
+            currentRecoveryDay.expenses.forEach((expense, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${expense.description}</td>
+                    <td>${expense.amount.toFixed(2)}</td>
+                    <td>${expense.time}</td>
+                    <td><button onclick="deleteRecoveryExpense(${index})" class="action-btn delete-btn"><i class="fas fa-trash"></i></button></td>
+                `;
+                recoveryExpensesTable.appendChild(row);
+            });
+        }
+
+        function deleteRecovery(index) {
+            if (confirm('Are you sure you want to delete this recovery?')) {
+                const recovery = currentRecoveryDay.recoveries[index];
+                const customer = customers[recovery.customerIndex];
+                
+                // Restore customer balance
+                customer.balance += recovery.amount;
+                
+                // Remove transaction
+                customer.transactions = customer.transactions.filter(t => 
+                    !(t.description.includes('recovery') && t.amount === -recovery.amount)
+                );
+                
+                // Remove recovery
+                currentRecoveryDay.recoveries.splice(index, 1);
+                
+                // Save changes
+                saveCustomers();
+                saveRecoveryData();
+                updateRecoverySummary();
+                populateRecoveryDropdowns();
+            }
+        }
+
+        function deleteSupplierPayment(index) {
+            if (confirm('Are you sure you want to delete this supplier payment?')) {
+                currentRecoveryDay.supplierPayments.splice(index, 1);
+                saveRecoveryData();
+                updateRecoverySummary();
+            }
+        }
+
+        function deleteRecoveryExpense(index) {
+            if (confirm('Are you sure you want to delete this recovery expense?')) {
+                currentRecoveryDay.expenses.splice(index, 1);
+                saveRecoveryData();
+                updateRecoverySummary();
+            }
+        }
+
+        function saveRecoveryData() {
+            localStorage.setItem('recoveryDays', JSON.stringify(recoveryDays));
+        }
+
+        // Bank Account Management
+        function loadBankTransactions() {
+            const bankTable = document.getElementById('bank-transactions-table').querySelector('tbody');
+            bankTable.innerHTML = '';
+            
+            bankTransactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.date}</td>
+                    <td>${transaction.type}</td>
+                    <td>${transaction.amount.toFixed(2)}</td>
+                    <td>${transaction.source}</td>
+                    <td>${transaction.description}</td>
+                    <td>${transaction.time}</td>
+                `;
+                bankTable.appendChild(row);
+            });
+        }
+
+        function updateBankSummary() {
+            const totalDeposits = bankTransactions
+                .filter(t => t.type === 'deposit')
+                .reduce((sum, t) => sum + t.amount, 0);
+                
+            const totalWithdrawals = bankTransactions
+                .filter(t => t.type === 'withdrawal')
+                .reduce((sum, t) => sum + t.amount, 0);
+                
+            const totalBalance = totalDeposits - totalWithdrawals;
+            
+            document.getElementById('total-bank-balance').textContent = totalBalance.toFixed(2);
+            document.getElementById('total-deposits').textContent = totalDeposits.toFixed(2);
+            document.getElementById('total-withdrawals').textContent = totalWithdrawals.toFixed(2);
+        }
+
+        function addBankTransaction() {
+            const date = document.getElementById('bank-date').value;
+            const type = document.getElementById('bank-transaction-type').value;
+            const amount = parseFloat(document.getElementById('bank-amount-input').value);
+            const source = document.getElementById('bank-source').value;
+            const description = document.getElementById('bank-description').value.trim();
+            
+            if (!date || isNaN(amount) || amount <= 0 || !description) {
+                alert('Please fill all fields with valid data');
+                return;
+            }
+            
+            bankTransactions.push({
+                date,
+                type,
+                amount,
+                source,
+                description,
+                time: new Date().toLocaleTimeString()
+            });
+            
+            saveBankTransactions();
+            loadBankTransactions();
+            updateBankSummary();
+            
+            // Clear form
+            document.getElementById('bank-amount-input').value = '';
+            document.getElementById('bank-description').value = '';
+            
+            alert('Bank transaction added successfully');
+        }
+
+        function saveBankTransactions() {
+            localStorage.setItem('bankTransactions', JSON.stringify(bankTransactions));
+        }
+
+        // Database Viewer
+        function loadDatabaseView() {
+            loadInventoryDBData();
+            loadCustomersDBData();
+            loadSuppliersDBData();
+            loadSalesDBData();
+            loadSalesmanDBData();
+            loadRecoveryDBData();
+            loadSupplierItemsDBData();
+            loadBankDBData();
+        }
+
+        function loadInventoryDBData() {
+            const tbody = document.getElementById('inventory-db-data');
+            tbody.innerHTML = '';
+            
+            inventory.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.price.toFixed(2)}</td>
+                    <td>${item.quantity}</td>
+                    <td>${(item.price * item.quantity).toFixed(2)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadCustomersDBData() {
+            const tbody = document.getElementById('customers-db-data');
+            tbody.innerHTML = '';
+            
+            customers.forEach(customer => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${customer.name}</td>
+                    <td>${customer.phone || 'N/A'}</td>
+                    <td>${customer.address || 'N/A'}</td>
+                    <td>${customer.balance.toFixed(2)}</td>
+                    <td>${customer.date || 'N/A'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadSuppliersDBData() {
+            const tbody = document.getElementById('suppliers-db-data');
+            tbody.innerHTML = '';
+            
+            suppliers.forEach(supplier => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${supplier.name}</td>
+                    <td>${supplier.contact || 'N/A'}</td>
+                    <td>${supplier.address || 'N/A'}</td>
+                    <td>${supplier.balance.toFixed(2)}</td>
+                    <td>${supplier.date || 'N/A'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadSalesDBData() {
+            const tbody = document.getElementById('sales-db-data');
+            tbody.innerHTML = '';
+            
+            sales.forEach(sale => {
+                const customer = sale.customerIndex !== null ? customers[sale.customerIndex].name : 'Walk-in';
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${sale.date}</td>
+                    <td>${customer}</td>
+                    <td>${sale.total.toFixed(2)}</td>
+                    <td>${sale.paymentAmount.toFixed(2)}</td>
+                    <td>${sale.balance.toFixed(2)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadSalesmanDBData() {
+            const tbody = document.getElementById('salesman-db-data');
+            tbody.innerHTML = '';
+            
+            salesmanDays.forEach(day => {
+                const daySales = day.sales.reduce((sum, sale) => sum + sale.amount, 0);
+                const dayExpenses = day.expenses.reduce((sum, exp) => sum + exp.amount, 0);
+                const dayBankTransfers = day.bankTransfers.reduce((sum, transfer) => sum + transfer.amount, 0);
+                const dayRemaining = daySales - dayExpenses - dayBankTransfers;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${day.date}</td>
+                    <td>${daySales.toFixed(2)}</td>
+                    <td>${dayExpenses.toFixed(2)}</td>
+                    <td>${dayBankTransfers.toFixed(2)}</td>
+                    <td>${dayRemaining.toFixed(2)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadRecoveryDBData() {
+            const tbody = document.getElementById('recovery-db-data');
+            tbody.innerHTML = '';
+            
+            recoveryDays.forEach(day => {
+                day.recoveries.forEach(recovery => {
+                    const customer = customers[recovery.customerIndex];
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${day.date}</td>
+                        <td>${customer.name}</td>
+                        <td>${recovery.amount.toFixed(2)}</td>
+                        <td>${recovery.time}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            });
+        }
+
+        function loadSupplierItemsDBData() {
+            const tbody = document.getElementById('supplier-items-db-data');
+            tbody.innerHTML = '';
+            
+            supplierItems.forEach(item => {
+                const totalWeight = item.quantity * item.weightPerUnit;
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.supplierName}</td>
+                    <td>${item.itemName}</td>
+                    <td>${item.price.toFixed(2)}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.weightPerUnit.toFixed(2)}</td>
+                    <td>${totalWeight.toFixed(2)}</td>
+                    <td>${(item.price * item.quantity).toFixed(2)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function loadBankDBData() {
+            const tbody = document.getElementById('bank-db-data');
+            tbody.innerHTML = '';
+            
+            bankTransactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${transaction.date}</td>
+                    <td>${transaction.type}</td>
+                    <td>${transaction.amount.toFixed(2)}</td>
+                    <td>${transaction.source}</td>
+                    <td>${transaction.description}</td>
+                    <td>${transaction.time}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Reports
+        function generateInventoryReport() {
+            let html = '<h3>Inventory Report</h3>';
+            html += '<table><thead><tr><th>Item</th><th>Price</th><th>Quantity</th><th>Value</th></tr></thead><tbody>';
+            
+            let totalValue = 0;
+            
+            inventory.forEach(item => {
+                const value = item.price * item.quantity;
+                totalValue += value;
+                
+                html += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.price.toFixed(2)}</td>
+                        <td>${item.quantity}</td>
+                        <td>${value.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            html += `<p><strong>Total Inventory Value:</strong> ${totalValue.toFixed(2)}</p>`;
+            
+            document.getElementById('report-results').innerHTML = html;
+            document.getElementById('sales-chart-container').style.display = 'none';
+        }
+
+        function generateSalesReport() {
+            let html = '<h3>Sales Report</h3>';
+            
+            if (sales.length === 0) {
+                html += '<p>No sales recorded yet</p>';
+                document.getElementById('report-results').innerHTML = html;
+                document.getElementById('sales-chart-container').style.display = 'none';
+                return;
+            }
+            
+            // Summary
+            const totalSales = sales.length;
+            const totalRevenue = sales.reduce((sum, sale) => sum + sale.total, 0);
+            const totalPaid = sales.reduce((sum, sale) => sum + sale.paymentAmount, 0);
+            const totalBalance = sales.reduce((sum, sale) => sum + sale.balance, 0);
+            
+            html += `
+                <div class="summary">
+                    <p><strong>Total Sales:</strong> ${totalSales}</p>
+                    <p><strong>Total Revenue:</strong> ${totalRevenue.toFixed(2)}</p>
+                    <p><strong>Total Received:</strong> ${totalPaid.toFixed(2)}</p>
+                    <p><strong>Total Outstanding:</strong> ${totalBalance.toFixed(2)}</p>
+                </div>
+            `;
+            
+            // Recent sales
+            html += '<h4>Recent Sales</h4><table><thead><tr><th>Date</th><th>Invoice #</th><th>Customer</th><th>Total</th><th>Paid</th><th>Balance</th></tr></thead><tbody>';
+            
+            const recentSales = sales.slice(-10).reverse();
+            
+            recentSales.forEach((sale, index) => {
+                const customer = sale.customerIndex !== null ? customers[sale.customerIndex].name : 'Walk-in';
+                html += `
+                    <tr>
+                        <td>${sale.date}</td>
+                        <td>INV-${(sales.length - index).toString().padStart(5, '0')}</td>
+                        <td>${customer}</td>
+                        <td>${sale.total.toFixed(2)}</td>
+                        <td>${sale.paymentAmount.toFixed(2)}</td>
+                        <td>${sale.balance.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            document.getElementById('report-results').innerHTML = html;
+            document.getElementById('sales-chart-container').style.display = 'none';
+        }
+
+        function generateCustomerReport() {
+            let html = '<h3>Customer Balances Report</h3>';
+            
+            if (customers.length === 0) {
+                html += '<p>No customers recorded yet</p>';
+                document.getElementById('report-results').innerHTML = html;
+                document.getElementById('sales-chart-container').style.display = 'none';
+                return;
+            }
+            
+            // Filter customers with balances
+            const customersWithBalance = customers.filter(c => c.balance !== 0);
+            
+            if (customersWithBalance.length === 0) {
+                html += '<p>No customers with balances</p>';
+                document.getElementById('report-results').innerHTML = html;
+                document.getElementById('sales-chart-container').style.display = 'none';
+                return;
+            }
+            
+            html += '<table><thead><tr><th>Customer</th><th>Phone</th><th>Balance</th><th>Date</th></tr></thead><tbody>';
+            
+            customersWithBalance.forEach(customer => {
+                const balanceClass = customer.balance > 0 ? 'text-danger' : 'text-success';
+                html += `
+                    <tr>
+                        <td>${customer.name}</td>
+                        <td>${customer.phone || 'N/A'}</td>
+                        <td class="${balanceClass}">${customer.balance.toFixed(2)}</td>
+                        <td>${customer.date || 'N/A'}</td>
+                    </tr>
+                `;
+            });
+            
+            const totalBalance = customersWithBalance.reduce((sum, c) => sum + c.balance, 0);
+            
+            html += '</tbody></table>';
+            html += `<p><strong>Total Outstanding:</strong> ${totalBalance.toFixed(2)}</p>`;
+            html += `<p><strong>Note:</strong> Positive balance means customer owes money, negative means customer has credit</p>`;
+            
+            document.getElementById('report-results').innerHTML = html;
+            document.getElementById('sales-chart-container').style.display = 'none';
+        }
+
+        function generateSupplierReport() {
+            let html = '<h3>Supplier Report</h3>';
+            
+            if (suppliers.length === 0) {
+                html += '<p>No suppliers recorded yet</p>';
+                document.getElementById('report-results').innerHTML = html;
+                document.getElementById('sales-chart-container').style.display = 'none';
+                return;
+            }
+            
+            html += '<table><thead><tr><th>Supplier</th><th>Contact</th><th>Address</th><th>Balance</th><th>Items Count</th><th>Total Stock Value</th></tr></thead><tbody>';
+            
+            suppliers.forEach(supplier => {
+                const supplierItemsList = supplierItems.filter(item => item.supplierName === supplier.name);
+                const totalStockValue = supplierItemsList.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                const balanceClass = supplier.balance < 0 ? 'text-danger' : 'text-success';
+                
+                html += `
+                    <tr>
+                        <td>${supplier.name}</td>
+                        <td>${supplier.contact || 'N/A'}</td>
+                        <td>${supplier.address || 'N/A'}</td>
+                        <td class="${balanceClass}">${supplier.balance.toFixed(2)}</td>
+                        <td>${supplierItemsList.length}</td>
+                        <td>${totalStockValue.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            html += `<p><strong>Note:</strong> Negative balance means we owe money to supplier, positive means supplier has credit</p>`;
+            
+            document.getElementById('report-results').innerHTML = html;
+            document.getElementById('sales-chart-container').style.display = 'none';
+        }
+
+        function generateSalesmanReport() {
+            let html = '<h3>Salesman Report</h3>';
+            
+            if (salesmanDays.length === 0) {
+                html += '<p>No salesman data recorded yet</p>';
+                document.getElementById('report-results').innerHTML = html;
+                document.getElementById('sales-chart-container').style.display = 'none';
+                return;
+            }
+            
+            // Summary of all days
+            const totalDays = salesmanDays.length;
+            const totalSales = salesmanDays.reduce((sum, day) => sum + day.sales.reduce((s, sale) => s + sale.amount, 0), 0);
+            const totalExpenses = salesmanDays.reduce((sum, day) => sum + day.expenses.reduce((e, exp) => e + exp.amount, 0), 0);
+            const totalBankTransfers = salesmanDays.reduce((sum, day) => sum + day.bankTransfers.reduce((b, transfer) => b + transfer.amount, 0), 0);
+            const totalRemaining = totalSales - totalExpenses - totalBankTransfers;
+            
+            html += `
+                <div class="summary">
+                    <p><strong>Total Days:</strong> ${totalDays}</p>
+                    <p><strong>Total Sales:</strong> ${totalSales.toFixed(2)}</p>
+                    <p><strong>Total Expenses:</strong> ${totalExpenses.toFixed(2)}</p>
+                    <p><strong>Total Bank Transfers:</strong> ${totalBankTransfers.toFixed(2)}</p>
+                    <p><strong>Total Remaining:</strong> ${totalRemaining.toFixed(2)}</p>
+                </div>
+            `;
+            
+            // Daily report
+            html += '<h4>Daily Reports</h4><table><thead><tr><th>Date</th><th>Sales</th><th>Expenses</th><th>Bank Transfer</th><th>Remaining</th></tr></thead><tbody>';
+            
+            const recentDays = salesmanDays.slice(-10).reverse();
+            
+            recentDays.forEach(day => {
+                const daySales = day.sales.reduce((sum, sale) => sum + sale.amount, 0);
+                const dayExpenses = day.expenses.reduce((sum, exp) => sum + exp.amount, 0);
+                const dayBankTransfers = day.bankTransfers.reduce((sum, transfer) => sum + transfer.amount, 0);
+                const dayRemaining = daySales - dayExpenses - dayBankTransfers;
+                
+                html += `
+                    <tr>
+                        <td>${day.date}</td>
+                        <td>${daySales.toFixed(2)}</td>
+                        <td>${dayExpenses.toFixed(2)}</td>
+                        <td>${dayBankTransfers.toFixed(2)}</td>
+                        <td>${dayRemaining.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            document.getElementById('report-results').innerHTML = html;
+            document.getElementById('sales-chart-container').style.display = 'none';
+        }
+
+        function generateRecoveryReport() {
+            let html = '<h3>Recovery Report</h3>';
+            
+            if (recoveryDays.length === 0) {
+                html += '<p>No recovery data recorded yet</p>';
+                document.getElementById('report-results').innerHTML = html;
+                document.getElementById('sales-chart-container').style.display = 'none';
+                return;
+            }
+            
+            // Summary of all days
+            const totalDays = recoveryDays.length;
+            const totalRecovered = recoveryDays.reduce((sum, day) => sum + day.recoveries.reduce((r, recovery) => r + recovery.amount, 0), 0);
+            const totalPaid = recoveryDays.reduce((sum, day) => sum + day.supplierPayments.reduce((p, payment) => p + payment.amount, 0), 0);
+            const totalExpenses = recoveryDays.reduce((sum, day) => sum + day.expenses.reduce((e, expense) => e + expense.amount, 0), 0);
+            const totalBankTransfers = recoveryDays.reduce((sum, day) => sum + day.bankTransfers.reduce((b, transfer) => b + transfer.amount, 0), 0);
+            const totalRemaining = totalRecovered - totalPaid - totalExpenses - totalBankTransfers;
+            
+            html += `
+                <div class="summary">
+                    <p><strong>Total Days:</strong> ${totalDays}</p>
+                    <p><strong>Total Recovered:</strong> ${totalRecovered.toFixed(2)}</p>
+                    <p><strong>Total Paid to Suppliers:</strong> ${totalPaid.toFixed(2)}</p>
+                    <p><strong>Total Expenses:</strong> ${totalExpenses.toFixed(2)}</p>
+                    <p><strong>Total Bank Transfers:</strong> ${totalBankTransfers.toFixed(2)}</p>
+                    <p><strong>Total Remaining:</strong> ${totalRemaining.toFixed(2)}</p>
+                </div>
+            `;
+            
+            // Daily report
+            html += '<h4>Daily Reports</h4><table><thead><tr><th>Date</th><th>Recovered</th><th>Paid to Suppliers</th><th>Expenses</th><th>Bank Transfer</th><th>Remaining</th></tr></thead><tbody>';
+            
+            const recentDays = recoveryDays.slice(-10).reverse();
+            
+            recentDays.forEach(day => {
+                const dayRecovered = day.recoveries.reduce((sum, r) => sum + r.amount, 0);
+                const dayPaid = day.supplierPayments.reduce((sum, p) => sum + p.amount, 0);
+                const dayExpenses = day.expenses.reduce((sum, e) => sum + e.amount, 0);
+                const dayBankTransfers = day.bankTransfers.reduce((sum, transfer) => sum + transfer.amount, 0);
+                const dayRemaining = dayRecovered - dayPaid - dayExpenses - dayBankTransfers;
+                
+                html += `
+                    <tr>
+                        <td>${day.date}</td>
+                        <td>${dayRecovered.toFixed(2)}</td>
+                        <td>${dayPaid.toFixed(2)}</td>
+                        <td>${dayExpenses.toFixed(2)}</td>
+                        <td>${dayBankTransfers.toFixed(2)}</td>
+                        <td>${dayRemaining.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            document.getElementById('report-results').innerHTML = html;
+            document.getElementById('sales-chart-container').style.display = 'none';
+        }
+
+        function generateBankReport() {
+            let html = '<h3>Bank Account Report</h3>';
+            
+            if (bankTransactions.length === 0) {
+                html += '<p>No bank transactions recorded yet</p>';
+                document.getElementById('report-results').innerHTML = html;
+                document.getElementById('sales-chart-container').style.display = 'none';
+                return;
+            }
+            
+            // Summary
+            const totalDeposits = bankTransactions
+                .filter(t => t.type === 'deposit')
+                .reduce((sum, t) => sum + t.amount, 0);
+                
+            const totalWithdrawals = bankTransactions
+                .filter(t => t.type === 'withdrawal')
+                .reduce((sum, t) => sum + t.amount, 0);
+                
+            const totalBalance = totalDeposits - totalWithdrawals;
+            
+            html += `
+                <div class="summary">
+                    <p><strong>Total Balance:</strong> ${totalBalance.toFixed(2)}</p>
+                    <p><strong>Total Deposits:</strong> ${totalDeposits.toFixed(2)}</p>
+                    <p><strong>Total Withdrawals:</strong> ${totalWithdrawals.toFixed(2)}</p>
+                </div>
+            `;
+            
+            // Recent transactions
+            html += '<h4>Recent Transactions</h4><table><thead><tr><th>Date</th><th>Type</th><th>Amount</th><th>Source</th><th>Description</th><th>Time</th></tr></thead><tbody>';
+            
+            const recentTransactions = bankTransactions.slice(-10).reverse();
+            
+            recentTransactions.forEach(transaction => {
+                const amountClass = transaction.type === 'deposit' ? 'text-success' : 'text-danger';
+                html += `
+                    <tr>
+                        <td>${transaction.date}</td>
+                        <td>${transaction.type}</td>
+                        <td class="${amountClass}">${transaction.amount.toFixed(2)}</td>
+                        <td>${transaction.source}</td>
+                        <td>${transaction.description}</td>
+                        <td>${transaction.time}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            document.getElementById('report-results').innerHTML = html;
+            document.getElementById('sales-chart-container').style.display = 'none';
+        }
+
+        function generateMonthlySalesReport() {
+            let html = '<h3>Monthly Sales Report</h3>';
+            
+            if (sales.length === 0) {
+                html += '<p>No sales recorded yet</p>';
+                document.getElementById('report-results').innerHTML = html;
+                document.getElementById('sales-chart-container').style.display = 'none';
+                return;
+            }
+            
+            // Group sales by month
+            const monthlySales = {};
+            
+            sales.forEach(sale => {
+                const date = new Date(sale.date);
+                const monthYear = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+                
+                if (!monthlySales[monthYear]) {
+                    monthlySales[monthYear] = {
+                        total: 0,
+                        paid: 0,
+                        balance: 0,
+                        count: 0
+                    };
+                }
+                
+                monthlySales[monthYear].total += sale.total;
+                monthlySales[monthYear].paid += sale.paymentAmount;
+                monthlySales[monthYear].balance += sale.balance;
+                monthlySales[monthYear].count++;
+            });
+            
+            // Create table
+            html += '<table><thead><tr><th>Month</th><th>Sales Count</th><th>Total Revenue</th><th>Amount Received</th><th>Outstanding</th></tr></thead><tbody>';
+            
+            Object.keys(monthlySales).sort().reverse().forEach(month => {
+                const data = monthlySales[month];
+                html += `
+                    <tr>
+                        <td>${month}</td>
+                        <td>${data.count}</td>
+                        <td>${data.total.toFixed(2)}</td>
+                        <td>${data.paid.toFixed(2)}</td>
+                        <td>${data.balance.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            
+            document.getElementById('report-results').innerHTML = html;
+            
+            // Create chart
+            createMonthlySalesChart(monthlySales);
+        }
+
+        function createMonthlySalesChart(monthlySales) {
+            const ctx = document.getElementById('sales-chart').getContext('2d');
+            
+            // Prepare data for chart
+            const months = Object.keys(monthlySales).sort().reverse().slice(0, 12).reverse();
+            const totals = months.map(month => monthlySales[month].total);
+            const paids = months.map(month => monthlySales[month].paid);
+            const balances = months.map(month => monthlySales[month].balance);
+            
+            // Destroy existing chart if it exists
+            if (window.salesChart) {
+                window.salesChart.destroy();
+            }
+            
+            // Create new chart
+            window.salesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Total Revenue',
+                            data: totals,
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Amount Received',
+                            data: paids,
+                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Outstanding',
+                            data: balances,
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '₹' + value;
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ₹' + context.parsed.y.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Show chart container
+            document.getElementById('sales-chart-container').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
