@@ -1796,9 +1796,7 @@
         function saveInventoryHistory() {
             localStorage.setItem('inventoryHistory', JSON.stringify(inventoryHistory));
         }
-        function saveSuppliers() {
-    localStorage.setItem('suppliers', JSON.stringify(suppliers));
-}
+       
 
         // Supplier Management
         function loadSuppliers() {
@@ -1827,6 +1825,9 @@
             // Update supplier dropdowns
             updateSupplierDropdowns();
         }
+       function saveSuppliers() {
+    localStorage.setItem('suppliers', JSON.stringify(suppliers));
+}
 
         function addNewSupplier() {
             const name = document.getElementById('supplier-name').value.trim();
